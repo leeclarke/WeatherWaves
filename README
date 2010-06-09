@@ -1,0 +1,3 @@
+WeatherWaves is still in development and wont do anyone much good just yet. Check back soon though because this shouldn't take too long to finish off!
+
+The goal for WeatherWaves is to produce a service that can return Weather Underground data in both Wave and JSON formats as well as to provide a portable utility that can be reused in an Android application that I am building. That's not bad mileage out of one little utility I think!
