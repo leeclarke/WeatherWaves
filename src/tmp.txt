@@ -44,3 +44,111 @@ public class Radar extends DragonflyDomain implements Comparable<Location>
 		return 0;
 	}
 }
+
+
+package org.dragonfly.wunderground.domain;
+
+import org.dragonfly.wunderground.service.Exportable;
+//TODO: Gen getter/setters and move. 
+//TODO: Add List to Location
+/**
+ * Part of the Location object and could be an innerclass.
+ * 
+ * @author lclarke
+ */
+public class Cam extends DragonflyDomain implements Comparable<Location>
+{
+	public static final String root = "cam";
+
+	@Exportable(xmlName = "handle")
+	public String handle;
+	
+	@Exportable(xmlName = "camid")
+	public String camid;
+	
+	@Exportable(xmlName = "camindex")
+	public String camindex;
+	
+	@Exportable(xmlName = "type")
+	public String type;
+
+	@Exportable(xmlName = "assoc_station_id", jsonName = "assocStationId")
+	public String assocStationId;
+
+	@Exportable(xmlName = "link")
+	public String link;
+	
+	@Exportable(xmlName = "linktext")
+	public String linktext;
+	
+	@Exportable(xmlName = "cameratype")
+	public String cameratype;
+	
+	@Exportable(xmlName = "organization")
+	public String organization;
+	
+	@Exportable(xmlName = "neighborhood")
+	public String neighborhood;
+	
+	@Exportable(xmlName = "address")
+	public String address;
+	
+	@Exportable(xmlName = "zip")
+	public String zip;
+	
+	@Exportable(xmlName = "city")
+	public String city;
+	
+	@Exportable(xmlName = "state")
+	public String state;
+	
+	@Exportable(xmlName = "country")
+	public String country;
+	
+	@Exportable(xmlName = "tzname")
+	public String tzname;
+	
+	@Exportable(xmlName = "hexant")
+	public String hexant;
+	
+	@Exportable(xmlName = "hexid")
+	public String hexid;
+	
+	@Exportable(xmlName = "lat")
+	public String lat;
+	
+	@Exportable(xmlName = "lon")
+	public String lon;
+	
+	@Exportable(xmlName = "updated")
+	public String updated;
+	
+	@Exportable(xmlName = "downloaded")
+	public String downloaded;
+	
+	@Exportable(xmlName = "hash")
+	public String hash;
+
+	@Exportable(xmlName = "isrecent")
+	public String isrecent;
+
+	@Exportable(xmlName = "frequency")
+	public String frequency;
+
+	@Exportable(xmlName = "CURRENTIMAGEURL", jsonName = "currentImageUrl")
+	public String currentImageUrl;
+
+	@Exportable(xmlName = "WIDGETCURRENTIMAGEURL", jsonName = "widgitCurrentImageUrl")
+	public String widgitCurrentImageUrl;
+
+	@Exportable(xmlName = "CAMURL", jsonName = "camUrl")
+	public String camUrl;
+
+	@Override
+	public int compareTo(Location o)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}
