@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Location;
+import org.dragonfly.wunderground.domain.Radar;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -17,6 +18,8 @@ public class GeoLookupHandler extends DragonflySaxHandler
 {
 
 	private static final Logger logger = Logger.getLogger(GeoLookupHandler.class);
+	private boolean radarSubObjFlag;
+	private Radar currRadarSubObj;
 	
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException
@@ -24,9 +27,22 @@ public class GeoLookupHandler extends DragonflySaxHandler
 		super.endElement(uri, localName, name);
 		if (this.currentMessage != null)
 		{
-			if(getNextToLastOnStack().equalsIgnoreCase("radar"))
+			if(getNextToLastOnStack().equalsIgnoreCase(Radar.root))
 			{
-				//TODO: Process radar info.
+				if (DragonflyDomain.fields.contains(name))
+				{
+					try
+					{
+						String mthName = BeanUtil.getMethodName(name);
+						if(logger.isDebugEnabled())logger.debug("call:" + mthName);
+						BeanUtil.invokeMethod(this.radarSubObjFlag, mthName, new Object[] { builder.toString().trim() },
+								null);
+					}
+					catch (Exception e)
+					{
+						logger.error("Error invoking Method for: " + name, e);
+					}
+				}
 			}
 			else if(getNextToLastOnStack().equalsIgnoreCase("webcams"))
 			{
@@ -40,6 +56,10 @@ public class GeoLookupHandler extends DragonflySaxHandler
 			{
 				messageItems.add(currentMessage);
 			}
+			else if(localName.equalsIgnoreCase(Radar.root) || name.equalsIgnoreCase(Radar.root))
+			{
+				this.currentMessage.setRadar(currRadarSubObj);
+			}
 			else if(getNextToLastOnStack().equalsIgnoreCase(Location.root))
 			{
 				if (DragonflyDomain.fields.contains(name))
@@ -48,9 +68,8 @@ public class GeoLookupHandler extends DragonflySaxHandler
 					try
 					{
 						String mthName = BeanUtil.getMethodName(name);
-						logger.debug("call:" + mthName);
-						BeanUtil.invokeMethod(this.currentMessage, mthName, new Object[] { builder.toString().trim() },
-								null);
+						if(logger.isDebugEnabled())logger.debug("call:" + mthName);
+						BeanUtil.invokeMethod(this.currentMessage, mthName, new Object[] { builder.toString().trim() },null);
 					}
 					catch (Exception e)
 					{
@@ -87,6 +106,11 @@ public class GeoLookupHandler extends DragonflySaxHandler
 			this.currentMessage.setLocType(locType);
 			
 		}
+		else if(localName.equalsIgnoreCase(Radar.root) || name.equalsIgnoreCase(Radar.root))
+		{
+			this.currRadarSubObj = new Radar();
+		}
+			
 		this.tagStack.add(name); //Add to end of stack
 	}
 }
