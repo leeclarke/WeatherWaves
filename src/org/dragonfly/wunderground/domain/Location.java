@@ -1,6 +1,8 @@
 package org.dragonfly.wunderground.domain;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dragonfly.wunderground.BeanUtil;
@@ -13,7 +15,6 @@ import org.dragonfly.wunderground.service.Exportable;
 public class Location extends DragonflyDomain implements Comparable<Location>
 {
 	// TODO: Add Non-runtime annotation to generate the getter/setter
-	// TODO: Finish adding the values. maybe add a root to annotation?
 	private static final Logger logger = Logger.getLogger(Location.class);
 
 	public static final String root = "location";
@@ -61,6 +62,12 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	@Exportable(xmlName = "type", jsonName = "location-type")
 	private String locType;
 
+	@Exportable(xmlName = "radar", jsonName = "radar")
+	private Radar radar = new Radar();
+	
+	//@Exportable(xmlName = "webcams", jsonName = "webCams")
+	private List<Cam> webCams = new ArrayList<Cam>();
+	
 	public Location()
 	{
 		super();
@@ -94,13 +101,6 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	@Override
 	public String toString()
 	{
-//		StringBuilder sb = new StringBuilder("Location: Type=");
-//		sb.append("").append(locType).append(" [");
-//		sb.append("Country: ").append(country).append('\n');
-//		sb.append("State: ").append(state).append('\n').append("City: ").append(city);
-//		sb.append("\n tz_short=").append(this.tz_short);
-//		sb.append("]");
-//		return sb.toString();
 		return BeanUtil.beanToString(this);
 	}
 
@@ -249,26 +249,44 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 		this.wuiurl = wuiurl;
 	}
 
-	// public String getDate()
-	// {
-	// return FORMATTER.format(this.date);
-	// }
+	public Radar getRadar()
+	{
+		return radar;
+	}
 
-	// public void setDate(String date)
-	// {
-	// // pad the date if necessary
-	// while (!date.endsWith("00"))
-	// {
-	// date += "0";
-	// }
-	// try
-	// {
-	// this.date = FORMATTER.parse(date.trim());
-	// }
-	// catch (ParseException e)
-	// {
-	// throw new RuntimeException(e);
-	// }
-	// }
+	public void setRadar(Radar radar)
+	{
+		this.radar = radar;
+	}
 
+	public List<Cam> getWebCams()
+	{
+		return webCams;
+	}
+
+	public void setWebCams(List<Cam> webCams)
+	{
+		this.webCams = webCams;
+	}
 }
+// public String getDate()
+// {
+// return FORMATTER.format(this.date);
+// }
+
+// public void setDate(String date)
+// {
+// // pad the date if necessary
+// while (!date.endsWith("00"))
+// {
+// date += "0";
+// }
+// try
+// {
+// this.date = FORMATTER.parse(date.trim());
+// }
+// catch (ParseException e)
+// {
+// throw new RuntimeException(e);
+// }
+// }
