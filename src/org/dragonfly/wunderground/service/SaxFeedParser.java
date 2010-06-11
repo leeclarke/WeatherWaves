@@ -21,9 +21,9 @@ public class SaxFeedParser extends BaseFeedParser
 		try
 		{
 			SAXParser parser = factory.newSAXParser();
-			GeoLookupHandler handler = new GeoLookupHandler();
+			DragonflySaxHandler handler = new GeoLookupHandler();
 			parser.parse(this.getInputStream(), handler);
-			return handler.getLocations();
+			return handler.getMessageItems();
 		}
 		catch (Exception e)
 		{

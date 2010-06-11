@@ -1,39 +1,23 @@
 package org.dragonfly.wunderground.service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dragonfly.wunderground.BeanUtil;
+import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Location;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-public class GeoLookupHandler extends DefaultHandler
+/**
+ * Handler for processing the Location XML feed from Wunderground.
+ * @author leeclarke
+ */
+public class GeoLookupHandler extends DragonflySaxHandler
 {
 
 	private static final Logger logger = Logger.getLogger(GeoLookupHandler.class);
-	private List<Location> locations;
-	private Location currentMessage;
-	private StringBuilder builder;
-	private LinkedList<String> tagStack = new LinkedList<String>();
-
-	public List<Location> getLocations()
-	{
-		return this.locations;
-	}
-
 	
-	
-	@Override
-	public void characters(char[] ch, int start, int length) throws SAXException
-	{
-		super.characters(ch, start, length);
-		builder.append(ch, start, length);
-	}
-
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException
 	{
@@ -54,11 +38,11 @@ public class GeoLookupHandler extends DefaultHandler
 			}
 			else if (name.equalsIgnoreCase(Location.root))
 			{
-				locations.add(currentMessage);
+				messageItems.add(currentMessage);
 			}
 			else if(getNextToLastOnStack().equalsIgnoreCase(Location.root))
 			{
-				if (Location.fields.contains(name))
+				if (DragonflyDomain.fields.contains(name))
 				{
 					logger.debug("tag value=" + name);
 					try
@@ -80,25 +64,11 @@ public class GeoLookupHandler extends DefaultHandler
 		}
 	}
 
-	/**
-	 * @return - item before the last.
-	 */
-	private String getNextToLastOnStack()
-	{
-		String nextToLastTag = "";
-		if(this.tagStack.size() >1)
-			nextToLastTag = this.tagStack.get(this.tagStack.size()-2);
-		
-		return nextToLastTag;
-	}
-
-
-
 	@Override
 	public void startDocument() throws SAXException
 	{
 		super.startDocument();
-		locations = new ArrayList<Location>();
+		messageItems = new ArrayList<Location>();
 		builder = new StringBuilder();
 	}
 
@@ -113,7 +83,8 @@ public class GeoLookupHandler extends DefaultHandler
 			{
 				locType = attributes.getValue(0);
 			}
-			this.currentMessage = new Location(locType);
+			this.currentMessage = new Location();
+			this.currentMessage.setLocType(locType);
 			
 		}
 		this.tagStack.add(name); //Add to end of stack

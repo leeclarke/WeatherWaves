@@ -1,52 +1,22 @@
 package org.dragonfly.wunderground.domain;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.service.Exportable;
 
 /**
  * POJO, represents the Value Object
  * 
  */
-public class Location implements Comparable<Location>
+public class Location extends DragonflyDomain implements Comparable<Location>
 {
-	// TODO: Pull up this functionality into abstract.
 	// TODO: Add Non-runtime annotation to generate the getter/setter
 	// TODO: Finish adding the values. maybe add a root to annotation?
-	// TODO: Need to handle non-String types when calling setters!
 	private static final Logger logger = Logger.getLogger(Location.class);
+
 	public static final String root = "location";
-	public static final List<String> fields;
-
-	static
-	{
-		fields = new ArrayList<String>();
-		Field[] rFields = Location.class.getDeclaredFields();
-		for (Field field : rFields)
-		{
-			Annotation[] annotations = field.getDeclaredAnnotations();
-
-			for (Annotation annotation : annotations)
-			{
-				if (annotation instanceof Exportable)
-				{
-					// Add to list of exposed fields, helps the setter know what
-					// fields are being imported from xml.
-					fields.add(field.getName());
-					Exportable myAnnotation = (Exportable) annotation;
-					logger.debug("field [" + field.getName() + "] \n\txml:: " + myAnnotation.xmlName() + "\n\tjson:: "
-							+ myAnnotation.jsonName());
-				}
-			}
-		}
-
-	}
-
 	static SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 
 	@Exportable(xmlName = "termsofservice", jsonName = "termsofservice")
@@ -96,12 +66,6 @@ public class Location implements Comparable<Location>
 		super();
 	}
 
-	public Location(String locType)
-	{
-		super();
-		this.locType = locType;
-	}
-
 	public String getCountry()
 	{
 		return country;
@@ -130,13 +94,14 @@ public class Location implements Comparable<Location>
 	@Override
 	public String toString()
 	{
-		StringBuilder sb = new StringBuilder("Location: Type=");
-		sb.append("").append(locType).append(" [");
-		sb.append("Country: ").append(country).append('\n');
-		sb.append("State: ").append(state).append('\n').append("City: ").append(city);
-		sb.append("\n tz_short=").append(this.tz_short);
-		sb.append("]");
-		return sb.toString();
+//		StringBuilder sb = new StringBuilder("Location: Type=");
+//		sb.append("").append(locType).append(" [");
+//		sb.append("Country: ").append(country).append('\n');
+//		sb.append("State: ").append(state).append('\n').append("City: ").append(city);
+//		sb.append("\n tz_short=").append(this.tz_short);
+//		sb.append("]");
+//		return sb.toString();
+		return BeanUtil.beanToString(this);
 	}
 
 	public int compareTo(Location another)
@@ -165,20 +130,6 @@ public class Location implements Comparable<Location>
 	public void setZip(String zip)
 	{
 		this.zip = zip;
-	}
-
-	public Object getValue(String name)
-	{
-		Field[] fields = this.getClass().getDeclaredFields();
-		for (Field f : fields)
-		{
-			Exportable annotation = f.getAnnotation(Exportable.class);
-			if (annotation == null)
-				continue;
-
-			f.setAccessible(true); // Make private fields accessible.
-		}
-		return null;
 	}
 
 	public String getTz_short()
@@ -226,11 +177,6 @@ public class Location implements Comparable<Location>
 		return lat;
 	}
 
-	public void setLat(Double lat)
-	{
-		this.lat = lat;
-	}
-
 	public void setLat(String lat)
 	{
 		try
@@ -247,10 +193,6 @@ public class Location implements Comparable<Location>
 		return lon;
 	}
 
-	public void setLon(Double lon)
-	{
-		this.lon = lon;
-	}
 
 	/**
 	 * Doesnt protect you from setting an invalid String value!

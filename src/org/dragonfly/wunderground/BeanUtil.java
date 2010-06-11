@@ -1,7 +1,13 @@
 package org.dragonfly.wunderground;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.dragonfly.wunderground.domain.DragonflyDomain;
+import org.dragonfly.wunderground.domain.Location;
+import org.dragonfly.wunderground.service.Exportable;
 
 public class BeanUtil
 {
@@ -19,12 +25,12 @@ public class BeanUtil
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public static final void invokeMethod(Object targetObj, String invMethod, Object[] values, Class<?>[] paramTypes) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	public static final Object invokeMethod(Object targetObj, String invMethod, Object[] values, Class<?>[] paramTypes) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException
 	{
 		if(targetObj != null && invMethod != null)
 		{
 			Method m =  (paramTypes != null)? targetObj.getClass().getDeclaredMethod(invMethod, paramTypes):selectMethod(targetObj, invMethod);
-			m.invoke(targetObj, values);
+			return m.invoke(targetObj, values);
 		}
 		else
 		{
@@ -77,6 +83,58 @@ public class BeanUtil
 		StringBuilder sb = new StringBuilder("set");
 		sb.append(name.substring(0, 1).toUpperCase());
 		sb.append(name.substring(1));
+		return sb.toString();
+	}
+	
+	public static final String getGetterMethodName(String name)
+	{
+		StringBuilder sb = new StringBuilder("get");
+		sb.append(name.substring(0, 1).toUpperCase());
+		sb.append(name.substring(1));
+		return sb.toString();
+	}
+	
+	/**
+	 * @param bean
+	 * @return
+	 */
+	public static final String beanToString(DragonflyDomain bean)
+	{
+		StringBuilder sb = new StringBuilder();
+		Field[] rFields = bean.getClass().getDeclaredFields();
+		for (Field field : rFields)
+		{
+			Annotation[] annotations = field.getDeclaredAnnotations();
+
+			for (Annotation annotation : annotations)
+			{
+				if (annotation instanceof Exportable)
+				{
+					// Add to list of exposed fields, helps the setter know what
+					// fields are being imported from xml.
+					try
+					{
+						sb.append(" ").append(field.getName()).append(" = ").append(BeanUtil.invokeMethod(bean, BeanUtil.getGetterMethodName(field.getName()), new Object[]{}, null));
+					} catch (Exception e)
+					{
+						
+					} 
+				}
+			}
+		}
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Output annotated fields as JSON
+	 * @param bean
+	 * @return
+	 */
+	public static final String beanToJSON(DragonflyDomain bean)
+	{
+		StringBuilder sb = new StringBuilder();
+		
 		return sb.toString();
 	}
 }
