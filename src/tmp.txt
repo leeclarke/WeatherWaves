@@ -1,3 +1,7 @@
+TODO: 
+1. Convert from log4j to JAva logger to get rid of dependancy.
+
+
 
 Example Remove a file from history::
 

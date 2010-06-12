@@ -1,17 +1,21 @@
 package org.dragonfly.wunderground.domain;
 
 import org.dragonfly.wunderground.service.Exportable;
-//TODO: Gen getter/setters and move. 
-//TODO: Add List to Location
 /**
- * Part of the Location object and could be an innerclass.
+ * Part of the Location object webcam collection.
  * 
  * @author lclarke
  */
-public class Cam extends DragonflyDomain implements Comparable<Location>
+public class Cam extends DragonflyDomain implements Comparable<Cam>
 {
 	public static final String root = "cam";
-
+	public static final String parent = "webcam";
+	
+	public Cam()
+	{
+		super();
+	}
+	
 	@Exportable(xmlName = "handle")
 	public String handle;
 	
@@ -97,7 +101,7 @@ public class Cam extends DragonflyDomain implements Comparable<Location>
 	public String camUrl;
 
 	@Override
-	public int compareTo(Location o)
+	public int compareTo(Cam o)
 	{
 		// TODO Auto-generated method stub
 		return 0;

@@ -1,11 +1,9 @@
 package org.dragonfly.wunderground.domain;
-
+//TODO: Add Stations
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.service.Exportable;
 
 /**
@@ -14,10 +12,8 @@ import org.dragonfly.wunderground.service.Exportable;
  */
 public class Location extends DragonflyDomain implements Comparable<Location>
 {
-	// TODO: Add Non-runtime annotation to generate the getter/setter
-	private static final Logger logger = Logger.getLogger(Location.class);
-
 	public static final String root = "location";
+
 	static SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 
 	@Exportable(xmlName = "termsofservice", jsonName = "termsofservice")
@@ -65,7 +61,7 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	@Exportable(xmlName = "radar", jsonName = "radar")
 	private Radar radar = new Radar();
 	
-	//@Exportable(xmlName = "webcams", jsonName = "webCams")
+	@Exportable(xmlName = "webcams", jsonName = "webCams")
 	private List<Cam> webCams = new ArrayList<Cam>();
 	
 	public Location()
@@ -96,12 +92,6 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	public void setDescription(String description)
 	{
 		this.city = description.trim();
-	}
-
-	@Override
-	public String toString()
-	{
-		return BeanUtil.beanToString(this);
 	}
 
 	public int compareTo(Location another)

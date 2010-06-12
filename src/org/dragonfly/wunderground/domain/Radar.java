@@ -2,7 +2,7 @@ package org.dragonfly.wunderground.domain;
 
 import org.dragonfly.wunderground.service.Exportable;
 
-public class Radar extends DragonflyDomain implements Comparable<Location>
+public class Radar extends DragonflyDomain
 {
 	public static final String root = "radar";
 	
@@ -12,6 +12,10 @@ public class Radar extends DragonflyDomain implements Comparable<Location>
 	@Exportable(xmlName = "url")
 	private String url;
 
+	public Radar()
+	{
+		super();
+	}
 
 	public String getImage_url()
 	{
@@ -36,11 +40,4 @@ public class Radar extends DragonflyDomain implements Comparable<Location>
 		this.url = url;
 	}
 
-
-	@Override
-	public int compareTo(Location o)
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }
