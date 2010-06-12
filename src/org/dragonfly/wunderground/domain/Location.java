@@ -1,5 +1,4 @@
 package org.dragonfly.wunderground.domain;
-//TODO: Add Stations
 //TODO: different Location searchs have diff tags!
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.List;
 import org.dragonfly.wunderground.service.Exportable;
 
 /**
- * POJO, represents the Value Object
+ * POJO, represents the Data Object
  * 
  */
 public class Location extends DragonflyDomain implements Comparable<Location>
@@ -64,6 +63,9 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	
 	@Exportable(xmlName = "webcams", jsonName = "webCams")
 	private List<Cam> webCams = new ArrayList<Cam>();
+	
+	@Exportable(xmlName = "stations")
+	private List<Station> stations = new ArrayList<Station>();
 	
 	public Location()
 	{
@@ -258,6 +260,16 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	public void setWebCams(List<Cam> webCams)
 	{
 		this.webCams = webCams;
+	}
+
+	public List<Station> getStations()
+	{
+		return stations;
+	}
+
+	public void setStations(List<Station> stations)
+	{
+		this.stations = stations;
 	}
 }
 // public String getDate()
