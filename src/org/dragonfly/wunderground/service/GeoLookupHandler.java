@@ -1,6 +1,7 @@
 package org.dragonfly.wunderground.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dragonfly.wunderground.BeanUtil;
@@ -23,6 +24,7 @@ public class GeoLookupHandler extends DragonflySaxHandler
 	private boolean radarSubObjFlag;
 	private Radar currRadarSubObj;
 	private Cam currCamSubObj;
+	private ArrayList<Location> locItems;
 
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException
@@ -42,7 +44,7 @@ public class GeoLookupHandler extends DragonflySaxHandler
 				// TODO: nearby_weather_stations
 			} else if (name.equalsIgnoreCase(Location.root))
 			{
-				messageItems.add(currentMessage);
+				locItems.add(currentMessage);
 			} else if (localName.equalsIgnoreCase(Radar.root) || name.equalsIgnoreCase(Radar.root))
 			{
 				if (logger.isDebugEnabled())
@@ -104,7 +106,7 @@ public class GeoLookupHandler extends DragonflySaxHandler
 	public void startDocument() throws SAXException
 	{
 		super.startDocument();
-		messageItems = new ArrayList<Location>();
+		locItems = new ArrayList<Location>();
 		builder = new StringBuilder();
 	}
 
@@ -131,5 +133,11 @@ public class GeoLookupHandler extends DragonflySaxHandler
 		}
 
 		this.tagStack.add(name); // Add to end of stack
+	}
+
+	@Override
+	public List<? extends DragonflyDomain> getRootItems()
+	{
+		return this.locItems;
 	}
 }

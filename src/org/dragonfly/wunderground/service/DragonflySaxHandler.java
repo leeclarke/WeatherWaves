@@ -3,6 +3,7 @@ package org.dragonfly.wunderground.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Location;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -11,10 +12,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * Extension of the Sax <code>DefaultHandler</code> simply to externalize reusable methods.
  * @author leeclarke
  */
-public class DragonflySaxHandler extends DefaultHandler
+public abstract class DragonflySaxHandler extends DefaultHandler
 {
 
-	protected List<Location> messageItems;
 	protected Location currentMessage;
 	protected StringBuilder builder;
 	protected LinkedList<String> tagStack = new LinkedList<String>();
@@ -25,15 +25,6 @@ public class DragonflySaxHandler extends DefaultHandler
 	public DragonflySaxHandler()
 	{
 		super();
-	}
-	
-	/**
-	 * Returns the resulting root items from the processed XML
-	 * @return
-	 */
-	public List<Location> getMessageItems()
-	{
-		return this.messageItems;
 	}
 
 	@Override
@@ -54,5 +45,7 @@ public class DragonflySaxHandler extends DefaultHandler
 		
 		return nextToLastTag;
 	}
+
+	public abstract List<? extends DragonflyDomain> getRootItems();
 
 }

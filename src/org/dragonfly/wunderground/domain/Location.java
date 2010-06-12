@@ -1,5 +1,6 @@
 package org.dragonfly.wunderground.domain;
 //TODO: Add Stations
+//TODO: different Location searchs have diff tags!
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;

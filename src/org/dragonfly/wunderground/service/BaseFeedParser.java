@@ -26,6 +26,7 @@ public abstract class BaseFeedParser implements FeedParser
 	private final URL feedUrl;
 	private String proxyPswd;
 	private String proxyUid;
+	private boolean useProxy = false;
 
 	/**
 	 * @param feedUrl - XML URL
@@ -48,17 +49,18 @@ public abstract class BaseFeedParser implements FeedParser
 	 */
 	protected InputStream getInputStream()
 	{
-		//System.setProperty("java.net.useSystemProxies", "true");
 		byte [] b = new byte[1];
 
 		try
 		{
+			if(useProxy)
+			{
 			Authenticator.setDefault(new Authenticator() {
 			      protected PasswordAuthentication getPasswordAuthentication() {
 			        return new
 			           PasswordAuthentication(proxyUid,proxyPswd.toCharArray());
 			    }});
-
+			}
 			
 		    HttpURLConnection con = (HttpURLConnection) feedUrl.openConnection();
 			return con.getInputStream();
@@ -69,6 +71,12 @@ public abstract class BaseFeedParser implements FeedParser
 		}
 	}
 	
+	/**
+	 * Sets up proxy data indicating that the parser should use a proxy for data retrieval.
+	 * @param host
+	 * @param uid
+	 * @param pswd
+	 */
 	public void setProxyData(String host, String uid, String pswd)
 	{
 		StringTokenizer st = new StringTokenizer(host, ":");
@@ -78,34 +86,39 @@ public abstract class BaseFeedParser implements FeedParser
 		System.setProperty("http.proxyPort", port);
 		this.proxyUid = uid;
 		this.proxyPswd = pswd;
+		this.useProxy  = true;
 	}
 	
-	protected Proxy getProxy()
-	{
-		
-		List<Proxy> l = null;
-		try {
-		  l = ProxySelector.getDefault().select(this.feedUrl.toURI());
-		}
-		catch (URISyntaxException e) {
-		  e.printStackTrace();
-		}
-
-		if (l != null) {
-			for (Proxy proxy : l)
-			{
-		      System.out.println("proxy hostname : " + proxy.type());
-		      InetSocketAddress addr = (InetSocketAddress) proxy.address();
-		      if (addr == null) {
-		        System.out.println("No Proxy");
-		      } 
-		      else {
-		        System.out.println("proxy hostname : " + addr.getHostName());
-		        System.out.println("proxy port : " + addr.getPort());
-		      }
-		   }
-			return l.get(0);
-		}
-		return Proxy.NO_PROXY;
-	}
+//	/**
+//	 * 
+//	 * @return - Proxy connection or null if no proxy.
+//	 */
+//	protected Proxy getProxy()
+//	{
+//		
+//		List<Proxy> l = null;
+//		try {
+//		  l = ProxySelector.getDefault().select(this.feedUrl.toURI());
+//		}
+//		catch (URISyntaxException e) {
+//		  e.printStackTrace();
+//		}
+//
+//		if (l != null) {
+//			for (Proxy proxy : l)
+//			{
+//		      logger.debug("proxy hostname : " + proxy.type());
+//		      InetSocketAddress addr = (InetSocketAddress) proxy.address();
+//		      if (addr == null) {
+//		    	  logger.debug("No Proxy");
+//		      } 
+//		      else {
+//		    	  logger.debug("proxy hostname : " + addr.getHostName());
+//		    	  logger.debug("proxy port : " + addr.getPort());
+//		      }
+//		   }
+//			return l.get(0);
+//		}
+//		return Proxy.NO_PROXY;
+//	}
 }
