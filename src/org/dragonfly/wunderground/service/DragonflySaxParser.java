@@ -7,6 +7,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Location;
+import org.dragonfly.wunderground.exception.DragonflySaxException;
 
 /**
  * @author leeclarke
@@ -28,7 +29,7 @@ public class DragonflySaxParser extends BaseFeedParser
 		this.handler = dHandler;
 	}
 
-	public List<? extends DragonflyDomain> parse()
+	public List<? extends DragonflyDomain> parse() throws DragonflySaxException
 	{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try
@@ -39,7 +40,7 @@ public class DragonflySaxParser extends BaseFeedParser
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException(e);
+			throw new DragonflySaxException(e); 
 		}
 	}
 }
