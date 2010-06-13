@@ -15,7 +15,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public abstract class DragonflySaxHandler extends DefaultHandler
 {
 
-	protected Location currentMessage;
+	protected Location currentLocation;
 	protected StringBuilder builder;
 	protected LinkedList<String> tagStack = new LinkedList<String>();
 

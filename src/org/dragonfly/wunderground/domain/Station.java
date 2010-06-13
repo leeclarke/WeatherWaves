@@ -10,8 +10,22 @@ import org.dragonfly.wunderground.service.Exportable;
  */
 public class Station extends DragonflyDomain implements Comparable<Station>
 {
+	public static final String root = "station";
+	
 	public enum StationType {
-		AIRPORT, PWS
+		AIRPORT("airport"), PWS("pws");
+		
+		private String name;
+		
+		StationType(String name)
+		{
+			this.name = name;
+		}
+		
+		public String getName()
+		{
+			return this.name;
+		}
 	};
 
 	@Exportable(xmlName = "type", jsonName = "type")
