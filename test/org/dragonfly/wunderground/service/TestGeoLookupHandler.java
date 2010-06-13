@@ -17,7 +17,8 @@ public class TestGeoLookupHandler
 	@Test
 	public void testParse_zip()
 	{
-		String feedurl = geoBaseURL + "33584";
+		String zip = "33584";
+		String feedurl = geoBaseURL + zip;
 
 		DragonflySaxParser sfp = new DragonflySaxParser(feedurl, new GeoLookupHandler());
 
@@ -26,11 +27,26 @@ public class TestGeoLookupHandler
 		assertNotNull(results);
 		assertTrue(results.size()>0);
 		logger.debug(results);
+		assertEquals(zip, results.get(0).getZip());
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
 	public void testParse_NonSpecificCity()
 	{
 		//Testing with city of Tampa returns 2 <Locations>
-		
+		String feedurl = geoBaseURL + "Tampa";
+
+		DragonflySaxParser sfp = new DragonflySaxParser(feedurl, new GeoLookupHandler());
+
+		// sfp.setProxyData("proxySvr:port","uid","password");
+		List<Location> results = (List<Location>) sfp.parse();
+		assertNotNull(results);
+		assertTrue(results.size()>0);
+		logger.debug(results);
+		logger.debug("Location ct:"+results.size());
+		assertTrue(results.size() == 2);
+		assertNotNull(results.get(0).getName());
+		assertNotNull(results.get(1).getName());
 	}
 }

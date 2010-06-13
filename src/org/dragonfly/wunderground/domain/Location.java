@@ -16,6 +16,14 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 
 	static SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 
+	//Only returned on the ambiguous city scarch
+	@Exportable(xmlName = "name")
+	private String name;
+	
+	//Only returned on the ambiguous city scarch ie >1 location but no match
+	@Exportable(xmlName = "link")
+	private String link;
+	
 	@Exportable(xmlName = "termsofservice", jsonName = "termsofservice")
 	private String termsofservice;
 
@@ -270,6 +278,26 @@ public class Location extends DragonflyDomain implements Comparable<Location>
 	public void setStations(List<Station> stations)
 	{
 		this.stations = stations;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getLink()
+	{
+		return link;
+	}
+
+	public void setLink(String link)
+	{
+		this.link = link;
 	}
 }
 // public String getDate()
