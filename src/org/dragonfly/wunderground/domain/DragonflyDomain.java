@@ -14,7 +14,7 @@ public class DragonflyDomain
 	private static final Logger logger = Logger.getLogger(DragonflyDomain.class);
 	
 	public static String root = "dragonfly";
-	public List<String> fields = new ArrayList<String>();
+	public static List<String> fields = new ArrayList<String>();
 
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class DragonflyDomain
 			}
 		}
 	}	
-
+	
 	@Override
 	public String toString()
 	{
