@@ -3,19 +3,21 @@ package org.dragonfly.wunderground.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
-import org.dragonfly.wunderground.domain.Location;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Extension of the Sax <code>DefaultHandler</code> simply to externalize reusable methods.
+ * Extension of the Sax <code>DefaultHandler</code> simply to externalize
+ * reusable methods.
+ * 
  * @author leeclarke
  */
 public abstract class DragonflySaxHandler extends DefaultHandler
 {
-
-	protected Location currentLocation;
+	private static final Logger logger = Logger.getLogger(DragonflySaxHandler.class);
 	protected StringBuilder builder;
 	protected LinkedList<String> tagStack = new LinkedList<String>();
 
@@ -40,10 +42,36 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 	protected String getNextToLastOnStack()
 	{
 		String nextToLastTag = "";
-		if(this.tagStack.size() >1)
-			nextToLastTag = this.tagStack.get(this.tagStack.size()-2);
-		
+		if (this.tagStack.size() > 1)
+			nextToLastTag = this.tagStack.get(this.tagStack.size() - 2);
+
 		return nextToLastTag;
+	}
+
+	/**
+	 * Helper method because the code just keeps repeating..
+	 * 
+	 * @param dbean
+	 *            - Domain bean to set
+	 * @param name
+	 *            - field to set.
+	 */
+	protected void setBeanValue(DragonflyDomain dbean, String name)
+	{
+		if (dbean.fields.contains(name))
+		{
+			try
+			{
+				String mthName = BeanUtil.getMethodName(name);
+				if (logger.isDebugEnabled())
+					logger.debug("call:" + mthName);
+				BeanUtil.invokeMethod(dbean, mthName, new Object[] { builder.toString().trim() }, null);
+			} catch (Exception e)
+			{
+				logger.error("Error invoking Method for: " + name, e);
+			}
+		}
+
 	}
 
 	public abstract List<? extends DragonflyDomain> getRootItems();

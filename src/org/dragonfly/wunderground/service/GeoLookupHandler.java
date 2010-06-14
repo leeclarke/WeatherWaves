@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.domain.Cam;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Location;
@@ -21,7 +20,7 @@ import org.xml.sax.SAXException;
  */
 public class GeoLookupHandler extends DragonflySaxHandler
 {
-
+	protected Location currentLocation;
 	private static final Logger logger = Logger.getLogger(GeoLookupHandler.class);
 	private Radar currRadarSubObj;
 	private Cam currCamSubObj;
@@ -71,28 +70,6 @@ public class GeoLookupHandler extends DragonflySaxHandler
 		}
 	}
 
-	/**
-	 * Helper method because the code just keeps repeating..
-	 * @param dbean - Domain bean to set
-	 * @param name - field to set.
-	 */
-	private void setBeanValue(DragonflyDomain dbean, String name)
-	{
-		if (dbean.fields.contains(name))
-		{
-			try
-			{
-				String mthName = BeanUtil.getMethodName(name);
-				if (logger.isDebugEnabled())
-					logger.debug("call:" + mthName);
-				BeanUtil.invokeMethod(dbean, mthName, new Object[] { builder.toString().trim() }, null);
-			} catch (Exception e)
-			{
-				logger.error("Error invoking Method for: " + name, e);
-			}
-		}
-		
-	}
 
 	@Override
 	public void startDocument() throws SAXException
