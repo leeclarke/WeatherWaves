@@ -1,4 +1,3 @@
-//TODO: Add processing for PWS
 package org.dragonfly.wunderground.service;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class CurrentObservationHandler extends DragonflySaxHandler
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException
 	{
-		super.endElement(uri, localName, name);
 		if (this.currWOb == null)
 			return;
 		
@@ -65,7 +63,6 @@ public class CurrentObservationHandler extends DragonflySaxHandler
 	@Override
 	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException
 	{
-		super.startElement(uri, localName, name, attributes);
 		//create new object for start of each root tag
 		if (localName.equalsIgnoreCase(WeatherObservation.root) || name.equalsIgnoreCase(WeatherObservation.root))
 		{
@@ -87,7 +84,6 @@ public class CurrentObservationHandler extends DragonflySaxHandler
 	@Override
 	public void startDocument() throws SAXException
 	{
-		super.startDocument();
 		wObItems = new ArrayList<WeatherObservation>();
 		builder = new StringBuilder();
 	}
