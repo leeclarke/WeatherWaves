@@ -56,8 +56,7 @@ public class CurrentObservationHandler extends DragonflySaxHandler
 				this.currWOb.setTermsofservice("http://www.wunderground.com/members/tos.asp#api");
 			wObItems.add(this.currWOb);
 		}
-		builder.setLength(0);
-		this.tagStack.removeLast();
+		closeTag();
 	}
 	
 	@Override
@@ -78,7 +77,7 @@ public class CurrentObservationHandler extends DragonflySaxHandler
 			this.curImage = new WuImage();
 		}
 		
-		this.tagStack.add(name); // Add to end of stack
+		updateStack(name);
 	}
 	
 	@Override
@@ -93,5 +92,4 @@ public class CurrentObservationHandler extends DragonflySaxHandler
 	{
 		return this.wObItems;
 	}
-
 }
