@@ -6,125 +6,125 @@ public class WeatherObservation extends DragonflyDomain
 {
 	public static final String root = "current_observation";
 
-	@Exportable(jsonName = "credit")
+	@Exportable(xmlName = "credit")
 	public String credit;
 
-	@Exportable(jsonName = "credit_URL",  xmlName = "creditURL")
+	@Exportable(xmlName = "credit_URL",  jsonName = "creditURL")
 	public String credit_URL;
 	
-	@Exportable(jsonName = "termsofservice")
+	@Exportable(xmlName = "termsofservice")
 	public String termsofservice;
 
-	@Exportable(jsonName = "station_id", xmlName = "stationId")
-	public String stationId;
+	@Exportable(xmlName = "station_id", jsonName = "stationId")
+	public String station_id;
 	
-	@Exportable(jsonName = "observation_time",  xmlName = "observationTime")
-	public String observationTime;
+	@Exportable(xmlName = "observation_time",  jsonName = "observationTime")
+	public String observation_time;
 	
-	@Exportable(jsonName = "observation_time_rfc822",  xmlName = "observationTimeRfc822")
-	public String observationTimeRfc822;
+	@Exportable(xmlName = "observation_time_rfc822",  jsonName = "observationTimeRfc822")
+	public String observation_time_rfc822;
 	
-	@Exportable(jsonName = "observation_epoch",  xmlName = "observationEpoch")
-	public String observationEpoch;
+	@Exportable(xmlName = "observation_epoch",  jsonName = "observationEpoch")
+	public String observation_epoch;
 	
-	@Exportable(jsonName = "local_time",  xmlName = "localTime")
-	public String localTime;
+	@Exportable(xmlName = "local_time",  jsonName = "localTime")
+	public String local_time;
 	
-	@Exportable(jsonName = "local_time_rfc822",  xmlName = "creditURL")
+	@Exportable(xmlName = "local_time_rfc822",  jsonName = "creditURL")
 	public String local_time_rfc822;
 	
-	@Exportable(jsonName = "local_epoch",  xmlName = "creditURL")
+	@Exportable(xmlName = "local_epoch",  jsonName = "creditURL")
 	public String local_epoch;
 	
-	@Exportable(jsonName = "weather")
+	@Exportable(xmlName = "weather")
 	public String weather;
 	
-	@Exportable(jsonName = "temperature_string",  xmlName = "temperatureString")
-	public String temperatureString;
+	@Exportable(xmlName = "temperature_string",  jsonName = "temperatureString")
+	public String temperature_string;
 	
-	@Exportable(jsonName = "temp_f",  xmlName = "tempF")
-	public String tempF;
+	@Exportable(xmlName = "temp_f",  jsonName = "tempF")
+	public String temp_f;
 	
-	@Exportable(jsonName = "temp_c",  xmlName = "tempC")
-	public String tempC;
+	@Exportable(xmlName = "temp_c",  jsonName = "tempC")
+	public String temp_c;
 	
-	@Exportable(jsonName = "relative_humidity",  xmlName = "relativeHumidity")
-	public String relativeHumidity;
+	@Exportable(xmlName = "relative_humidity",  jsonName = "relativeHumidity")
+	public String relative_humidity;
 	
-	@Exportable(jsonName = "wind_string",  xmlName = "windString")
-	public String windString;
+	@Exportable(xmlName = "wind_string",  jsonName = "windString")
+	public String wind_string;
 	
-	@Exportable(jsonName = "wind_dir",  xmlName = "winDir")
-	public String windDir;
+	@Exportable(xmlName = "wind_dir",  jsonName = "winDir")
+	public String wind_dir;
 	
-	@Exportable(jsonName = "wind_degrees",  xmlName = "windDegrees")
+	@Exportable(xmlName = "wind_degrees",  jsonName = "windDegrees")
 	public String wind_degrees;
 	
-	@Exportable(jsonName = "wind_mph",  xmlName = "windMph")
-	public String windMph;
+	@Exportable(xmlName = "wind_mph",  jsonName = "windMph")
+	public String wind_mph;
 	
-	@Exportable(jsonName = "wind_gust_mph",  xmlName = "windGustMph")
-	public String windGustMph;
+	@Exportable(xmlName = "wind_gust_mph",  jsonName = "windGustMph")
+	public String wind_gust_mph;
 	
-	@Exportable(jsonName = "pressure_string",  xmlName = "pressureString")
-	public String pressureString;
+	@Exportable(xmlName = "pressure_string",  jsonName = "pressureString")
+	public String pressure_string;
 	
-	@Exportable(jsonName = "pressure_mb",  xmlName = "pressureMb")
-	public String pressureMb;
+	@Exportable(xmlName = "pressure_mb",  jsonName = "pressureMb")
+	public String pressure_mb;
 	
-	@Exportable(jsonName = "pressure_in",  xmlName = "pressureIn")
-	public String pressureIn;
+	@Exportable(xmlName = "pressure_in",  jsonName = "pressureIn")
+	public String pressure_in;
 	
-	@Exportable(jsonName = "dewpoint_string",  xmlName = "dewpointString")
-	public String dewpointString;
+	@Exportable(xmlName = "dewpoint_string",  jsonName = "dewpointString")
+	public String dewpoint_string;
 	
-	@Exportable(jsonName = "dewpoint_f",  xmlName = "dewpointF")
-	public String dewpointF;
+	@Exportable(xmlName = "dewpoint_f",  jsonName = "dewpointF")
+	public String dewpoint_f;
 	
-	@Exportable(jsonName = "dewpoint_c",  xmlName = "dewpointC")
-	public String dewpointC;
+	@Exportable(xmlName = "dewpoint_c",  jsonName = "dewpointC")
+	public String dewpoint_c;
 	
-	@Exportable(jsonName = "heat_index_string", xmlName = "heatIndexString")
-	public String heatIndexString;
+	@Exportable(xmlName = "heat_index_string", jsonName = "heatIndexString")
+	public String heat_index_string;
 	
-	@Exportable(jsonName = "heat_index_f", xmlName = "heatIndexF")
-	public String heatIndexF;
+	@Exportable(xmlName = "heat_index_f", jsonName = "heatIndexF")
+	public String heat_index_f;
 	
-	@Exportable(jsonName = "heat_index_c", xmlName = "heatIndexC")
-	public String heatIndexC;
+	@Exportable(xmlName = "heat_index_c", jsonName = "heatIndexC")
+	public String heat_index_c;
 	
-	@Exportable(jsonName = "windchill_string", xmlName = "windchillString")
-	public String windchillString;
+	@Exportable(xmlName = "windchill_string", jsonName= "windchillString")
+	public String windchill_string;
 	
-	@Exportable(jsonName = "windchill_f", xmlName = "windchillF")
-	public String windchillF;
+	@Exportable(xmlName = "windchill_f", jsonName = "windchillF")
+	public String windchill_f;
 	
-	@Exportable(jsonName = "windchill_c", xmlName = "windchillC")
-	public String windchillC;
+	@Exportable(xmlName = "windchill_c", jsonName = "windchillC")
+	public String windchill_c;
 	
-	@Exportable(jsonName = "visibility_mi", xmlName = "visibilityMi")
-	public String visibilityMi;
+	@Exportable(xmlName = "visibility_mi", jsonName = "visibilityMi")
+	public String visibility_mi;
 	
-	@Exportable(jsonName = "visibility_km", xmlName = "visibilityKm")
-	public String visibilityKm;
+	@Exportable(xmlName = "visibility_km", jsonName = "visibilityKm")
+	public String visibility_km;
 	
-	@Exportable(jsonName = "forecast_url", xmlName = "forecastUrl")
-	public String forecastUrl;
+	@Exportable(xmlName = "forecast_url", jsonName = "forecastUrl")
+	public String forecast_url;
 	
-	@Exportable(jsonName = "history_url", xmlName = "historyUrl")
-	public String historyUrl;
+	@Exportable(xmlName = "history_url", jsonName = "historyUrl")
+	public String history_url;
 	
-	@Exportable(jsonName = "ob_url",xmlName = "obUrl")
-	public String obUrl;
+	@Exportable(xmlName = "ob_url", jsonName = "obUrl")
+	public String ob_url;
 	
-	@Exportable(jsonName = "image", xmlName = "wuImage")
-	public WuImage wuImage;
+	@Exportable(xmlName = "image", jsonName = "wuImage")
+	public WuImage image;
 	
-	@Exportable(jsonName = "display_location", xmlName = "displayLocation")
-	public ObservationLocation displayLocation;
+	@Exportable(xmlName = "display_location", jsonName = "displayLocation")
+	public ObservationLocation display_location;
 	
-	@Exportable(jsonName = "observation_locatio", xmlName = "observationLocation")
-	public ObservationLocation observationLocation;
+	@Exportable(xmlName = "observation_location", jsonName = "observationLocation")
+	public ObservationLocation observation_location;
 
 	public WeatherObservation()
 	{
@@ -161,54 +161,54 @@ public class WeatherObservation extends DragonflyDomain
 		this.termsofservice = termsofservice;
 	}
 
-	public String getStationId()
+	public String getStation_id()
 	{
-		return stationId;
+		return station_id;
 	}
 
-	public void setStationId(String stationId)
+	public void setStation_id(String stationId)
 	{
-		this.stationId = stationId;
+		station_id = stationId;
 	}
 
-	public String getObservationTime()
+	public String getObservation_time()
 	{
-		return observationTime;
+		return observation_time;
 	}
 
-	public void setObservationTime(String observationTime)
+	public void setObservation_time(String observationTime)
 	{
-		this.observationTime = observationTime;
+		observation_time = observationTime;
 	}
 
-	public String getObservationTimeRfc822()
+	public String getObservation_time_rfc822()
 	{
-		return observationTimeRfc822;
+		return observation_time_rfc822;
 	}
 
-	public void setObservationTimeRfc822(String observationTimeRfc822)
+	public void setObservation_time_rfc822(String observationTimeRfc822)
 	{
-		this.observationTimeRfc822 = observationTimeRfc822;
+		observation_time_rfc822 = observationTimeRfc822;
 	}
 
-	public String getObservationEpoch()
+	public String getObservation_epoch()
 	{
-		return observationEpoch;
+		return observation_epoch;
 	}
 
-	public void setObservationEpoch(String observationEpoch)
+	public void setObservation_epoch(String observationEpoch)
 	{
-		this.observationEpoch = observationEpoch;
+		observation_epoch = observationEpoch;
 	}
 
-	public String getLocalTime()
+	public String getLocal_time()
 	{
-		return localTime;
+		return local_time;
 	}
 
-	public void setLocalTime(String localTime)
+	public void setLocal_time(String localTime)
 	{
-		this.localTime = localTime;
+		local_time = localTime;
 	}
 
 	public String getLocal_time_rfc822()
@@ -241,64 +241,64 @@ public class WeatherObservation extends DragonflyDomain
 		this.weather = weather;
 	}
 
-	public String getTemperatureString()
+	public String getTemperature_string()
 	{
-		return temperatureString;
+		return temperature_string;
 	}
 
-	public void setTemperatureString(String temperatureString)
+	public void setTemperature_string(String temperatureString)
 	{
-		this.temperatureString = temperatureString;
+		temperature_string = temperatureString;
 	}
 
-	public String getTempF()
+	public String getTemp_f()
 	{
-		return tempF;
+		return temp_f;
 	}
 
-	public void setTempF(String tempF)
+	public void setTemp_f(String tempF)
 	{
-		this.tempF = tempF;
+		temp_f = tempF;
 	}
 
-	public String getTempC()
+	public String getTemp_c()
 	{
-		return tempC;
+		return temp_c;
 	}
 
-	public void setTempC(String tempC)
+	public void setTemp_c(String tempC)
 	{
-		this.tempC = tempC;
+		temp_c = tempC;
 	}
 
-	public String getRelativeHumidity()
+	public String getRelative_humidity()
 	{
-		return relativeHumidity;
+		return relative_humidity;
 	}
 
-	public void setRelativeHumidity(String relativeHumidity)
+	public void setRelative_humidity(String relativeHumidity)
 	{
-		this.relativeHumidity = relativeHumidity;
+		relative_humidity = relativeHumidity;
 	}
 
-	public String getWindString()
+	public String getWind_string()
 	{
-		return windString;
+		return wind_string;
 	}
 
-	public void setWindString(String windString)
+	public void setWind_string(String windString)
 	{
-		this.windString = windString;
+		wind_string = windString;
 	}
 
-	public String getWindDir()
+	public String getWind_dir()
 	{
-		return windDir;
+		return wind_dir;
 	}
 
-	public void setWindDir(String windDir)
+	public void setWind_dir(String windDir)
 	{
-		this.windDir = windDir;
+		wind_dir = windDir;
 	}
 
 	public String getWind_degrees()
@@ -311,194 +311,226 @@ public class WeatherObservation extends DragonflyDomain
 		wind_degrees = windDegrees;
 	}
 
-	public String getWindMph()
+	public String getWind_mph()
 	{
-		return windMph;
+		return wind_mph;
 	}
 
-	public void setWindMph(String windMph)
+	public void setWind_mph(String windMph)
 	{
-		this.windMph = windMph;
+		wind_mph = windMph;
 	}
 
-	public String getWindGustMph()
+	public String getWind_gust_mph()
 	{
-		return windGustMph;
+		return wind_gust_mph;
 	}
 
-	public void setWindGustMph(String windGustMph)
+	public void setWind_gust_mph(String windGustMph)
 	{
-		this.windGustMph = windGustMph;
+		wind_gust_mph = windGustMph;
 	}
 
-	public String getPressureString()
+	public String getPressure_string()
 	{
-		return pressureString;
+		return pressure_string;
 	}
 
-	public void setPressureString(String pressureString)
+	public void setPressure_string(String pressureString)
 	{
-		this.pressureString = pressureString;
+		pressure_string = pressureString;
 	}
 
-	public String getPressureMb()
+	public String getPressure_mb()
 	{
-		return pressureMb;
+		return pressure_mb;
 	}
 
-	public void setPressureMb(String pressureMb)
+	public void setPressure_mb(String pressureMb)
 	{
-		this.pressureMb = pressureMb;
+		pressure_mb = pressureMb;
 	}
 
-	public String getPressureIn()
+	public String getPressure_in()
 	{
-		return pressureIn;
+		return pressure_in;
 	}
 
-	public void setPressureIn(String pressureIn)
+	public void setPressure_in(String pressureIn)
 	{
-		this.pressureIn = pressureIn;
+		pressure_in = pressureIn;
 	}
 
-	public String getDewpointString()
+	public String getDewpoint_string()
 	{
-		return dewpointString;
+		return dewpoint_string;
 	}
 
-	public void setDewpointString(String dewpointString)
+	public void setDewpoint_string(String dewpointString)
 	{
-		this.dewpointString = dewpointString;
+		dewpoint_string = dewpointString;
 	}
 
-	public String getDewpointF()
+	public String getDewpoint_f()
 	{
-		return dewpointF;
+		return dewpoint_f;
 	}
 
-	public void setDewpointF(String dewpointF)
+	public void setDewpoint_f(String dewpointF)
 	{
-		this.dewpointF = dewpointF;
+		dewpoint_f = dewpointF;
 	}
 
-	public String getDewpointC()
+	public String getDewpoint_c()
 	{
-		return dewpointC;
+		return dewpoint_c;
 	}
 
-	public void setDewpointC(String dewpointC)
+	public void setDewpoint_c(String dewpointC)
 	{
-		this.dewpointC = dewpointC;
+		dewpoint_c = dewpointC;
 	}
 
-	public String getHeatIndexString()
+	public String getHeat_index_string()
 	{
-		return heatIndexString;
+		return heat_index_string;
 	}
 
-	public void setHeatIndexString(String heatIndexString)
+	public void setHeat_index_string(String heatIndexString)
 	{
-		this.heatIndexString = heatIndexString;
+		heat_index_string = heatIndexString;
 	}
 
-	public String getHeatIndexF()
+	public String getHeat_index_f()
 	{
-		return heatIndexF;
+		return heat_index_f;
 	}
 
-	public void setHeatIndexF(String heatIndexF)
+	public void setHeat_index_f(String heatIndexF)
 	{
-		this.heatIndexF = heatIndexF;
+		heat_index_f = heatIndexF;
 	}
 
-	public String getHeatIndexC()
+	public String getHeat_index_c()
 	{
-		return heatIndexC;
+		return heat_index_c;
 	}
 
-	public void setHeatIndexC(String heatIndexC)
+	public void setHeat_index_c(String heatIndexC)
 	{
-		this.heatIndexC = heatIndexC;
+		heat_index_c = heatIndexC;
 	}
 
-	public String getWindchillString()
+	public String getWindchill_string()
 	{
-		return windchillString;
+		return windchill_string;
 	}
 
-	public void setWindchillString(String windchillString)
+	public void setWindchill_string(String windchillString)
 	{
-		this.windchillString = windchillString;
+		windchill_string = windchillString;
 	}
 
-	public String getWindchillF()
+	public String getWindchill_f()
 	{
-		return windchillF;
+		return windchill_f;
 	}
 
-	public void setWindchillF(String windchillF)
+	public void setWindchill_f(String windchillF)
 	{
-		this.windchillF = windchillF;
+		windchill_f = windchillF;
 	}
 
-	public String getWindchillC()
+	public String getWindchill_c()
 	{
-		return windchillC;
+		return windchill_c;
 	}
 
-	public void setWindchillC(String windchillC)
+	public void setWindchill_c(String windchillC)
 	{
-		this.windchillC = windchillC;
+		windchill_c = windchillC;
 	}
 
-	public String getVisibilityMi()
+	public String getVisibility_mi()
 	{
-		return visibilityMi;
+		return visibility_mi;
 	}
 
-	public void setVisibilityMi(String visibilityMi)
+	public void setVisibility_mi(String visibilityMi)
 	{
-		this.visibilityMi = visibilityMi;
+		visibility_mi = visibilityMi;
 	}
 
-	public String getVisibilityKm()
+	public String getVisibility_km()
 	{
-		return visibilityKm;
+		return visibility_km;
 	}
 
-	public void setVisibilityKm(String visibilityKm)
+	public void setVisibility_km(String visibilityKm)
 	{
-		this.visibilityKm = visibilityKm;
+		visibility_km = visibilityKm;
 	}
 
-	public String getForecastUrl()
+	public String getForecast_url()
 	{
-		return forecastUrl;
+		return forecast_url;
 	}
 
-	public void setForecastUrl(String forecastUrl)
+	public void setForecast_url(String forecastUrl)
 	{
-		this.forecastUrl = forecastUrl;
+		forecast_url = forecastUrl;
 	}
 
-	public String getHistoryUrl()
+	public String getHistory_url()
 	{
-		return historyUrl;
+		return history_url;
 	}
 
-	public void setHistoryUrl(String historyUrl)
+	public void setHistory_url(String historyUrl)
 	{
-		this.historyUrl = historyUrl;
+		history_url = historyUrl;
 	}
 
-	public String getObUrl()
+	public String getOb_url()
 	{
-		return obUrl;
+		return ob_url;
 	}
 
-	public void setObUrl(String obUrl)
+	public void setOb_url(String obUrl)
 	{
-		this.obUrl = obUrl;
+		ob_url = obUrl;
 	}
+
+	public WuImage getImage()
+	{
+		return image;
+	}
+
+	public void setImage(WuImage image)
+	{
+		this.image = image;
+	}
+
+	public ObservationLocation getDisplay_location()
+	{
+		return display_location;
+	}
+
+	public void setDisplay_location(ObservationLocation displayLocation)
+	{
+		display_location = displayLocation;
+	}
+
+	public ObservationLocation getObservation_location()
+	{
+		return observation_location;
+	}
+
+	public void setObservation_location(ObservationLocation observationLocation)
+	{
+		observation_location = observationLocation;
+	}
+
+	
 
 }

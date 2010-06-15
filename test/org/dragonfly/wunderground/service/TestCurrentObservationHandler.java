@@ -10,7 +10,8 @@ import org.dragonfly.wunderground.exception.DragonflySaxException;
 
 public class TestCurrentObservationHandler  extends TestCase
 {
-	public static final String geoBaseURL = "http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=TPA";
+	public static final String obsBaseURL = "http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=";
+	public static final String pwsURL = "http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID=";
 	
 	
 	private static final Logger logger = Logger.getLogger(TestCurrentObservationHandler.class);
@@ -19,53 +20,34 @@ public class TestCurrentObservationHandler  extends TestCase
 	public void testParse_Airport() throws DragonflySaxException
 	{
 		String airport = "KTPA";
-		String feedurl = geoBaseURL + airport;
+		String feedurl = obsBaseURL + airport;
 
+		logger.debug("connect url:"+ feedurl);
 		DragonflySaxParser sfp = new DragonflySaxParser(feedurl, new CurrentObservationHandler());
 
 		// sfp.setProxyData("proxySvr:port","uid","password");
-		sfp.setProxyData("Stamiproxy:8888","lclarke","Tika6848");
 		List<WeatherObservation> results = (List<WeatherObservation>) sfp.parse();
 		assertNotNull(results);
 		assertTrue(results.size()>0);
 		logger.debug(results);
-		assertEquals(airport, results.get(0).getStationId());
+		assertEquals(airport, results.get(0).getStation_id());
 	}
-}
-//Added below cuz I cant change the file through the web ui.
-/*
-package org.dragonfly.wunderground.service;
-
-import java.util.List;
-
-import junit.framework.TestCase;
-
-import org.apache.log4j.Logger;
-import org.dragonfly.wunderground.domain.WeatherObservation;
-import org.dragonfly.wunderground.exception.DragonflySaxException;
-
-public class TestCurrentObservationHandler  extends TestCase
-{
-	public static final String geoBaseURL = "http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=TPA";
 	
-	
-	private static final Logger logger = Logger.getLogger(TestCurrentObservationHandler.class);
-	
-	@SuppressWarnings("unchecked")
-	public void testParse_Airport() throws DragonflySaxException
+	public void testParse_WeatherStation() throws DragonflySaxException
 	{
-		String airport = "KTPA";
-		String feedurl = geoBaseURL + airport;
+		//NOTE this is a totally different URL call.
+		String pwdId = "KFLOCALA28";
+		String feedurl = pwsURL + pwdId;
 
+		logger.debug("connect url:"+ feedurl);
 		DragonflySaxParser sfp = new DragonflySaxParser(feedurl, new CurrentObservationHandler());
 
 		// sfp.setProxyData("proxySvr:port","uid","password");
-		sfp.setProxyData("Stamiproxy:8888","lclarke","Tika6848");
 		List<WeatherObservation> results = (List<WeatherObservation>) sfp.parse();
 		assertNotNull(results);
 		assertTrue(results.size()>0);
 		logger.debug(results);
-		assertEquals(airport, results.get(0).getStationId());
+		assertEquals(pwdId, results.get(0).getStation_id());
 	}
 }
-*/
+

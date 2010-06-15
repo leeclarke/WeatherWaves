@@ -8,41 +8,47 @@ import org.dragonfly.wunderground.service.Exportable;
 public class ObservationLocation extends DragonflyDomain
 {
 	public static final List<String> root = new ArrayList<String>();
+	public static final String DISPLAY_LOC = "display_location";
+	public static final String OBSERVATION_LOC = "observation_location";
 	static {
-		root.add("display_location");
-		root.add("observation_location");
+		root.add(DISPLAY_LOC);
+		root.add(OBSERVATION_LOC);
 	}
 	
 	@Exportable(jsonName = "full",  xmlName = "fullName")
 	private String fullName;
 	
-	@Exportable(jsonName = "city")
+	@Exportable(xmlName = "city")
 	private String city;
 	
-	@Exportable(jsonName = "state")
+	@Exportable(xmlName = "state")
 	private String state;
 	
-	@Exportable(jsonName = "state_name",  xmlName = "stateName")
-	private String stateName;
+	@Exportable(xmlName = "state_name",  jsonName = "stateName")
+	private String state_name;
 	
-	@Exportable(jsonName = "country")
+	@Exportable(xmlName = "country")
 	private String country;
 	
-	@Exportable(jsonName = "country_iso3166",  xmlName = "countryIso")
-	private String countryIso;
+	@Exportable(xmlName = "country_iso3166",  jsonName = "countryIso")
+	private String country_iso3166;
 	
-	@Exportable(jsonName = "zip")
+	@Exportable(xmlName = "zip")
 	private String zip;
 	
-	@Exportable(jsonName = "latitude")
+	@Exportable(xmlName = "latitude")
 	private String latitude;
 	
-	@Exportable(jsonName = "longitude")
+	@Exportable(xmlName = "longitude")
 	private String longitude;
 	
-	@Exportable(jsonName = "elevation")
+	@Exportable(xmlName = "elevation")
 	private String elevation;
 
+//	@Exportable(xmlName = "" )
+	private String locType;
+
+	
 	public String getFullName()
 	{
 		return fullName;
@@ -73,14 +79,14 @@ public class ObservationLocation extends DragonflyDomain
 		this.state = state;
 	}
 
-	public String getStateName()
+	public String getState_name()
 	{
-		return stateName;
+		return state_name;
 	}
 
-	public void setStateName(String stateName)
+	public void setState_name(String stateName)
 	{
-		this.stateName = stateName;
+		this.state_name = stateName;
 	}
 
 	public String getCountry()
@@ -93,14 +99,14 @@ public class ObservationLocation extends DragonflyDomain
 		this.country = country;
 	}
 
-	public String getCountryIso()
+	public String getCountry_iso3166()
 	{
-		return countryIso;
+		return country_iso3166;
 	}
 
-	public void setCountryIso(String countryIso)
+	public void setCountry_iso3166(String countryIso)
 	{
-		this.countryIso = countryIso;
+		this.country_iso3166 = countryIso;
 	}
 
 	public String getZip()
@@ -142,5 +148,17 @@ public class ObservationLocation extends DragonflyDomain
 	{
 		this.elevation = elevation;
 	}
+
+
+	public String getLocType()
+	{
+		return locType;
+	}
+
+	public void setLocType(String locType)
+	{
+		this.locType = locType;
+	}
+	
 	
 }
