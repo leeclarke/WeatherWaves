@@ -6,3 +6,284 @@ TODO:
 Example Remove a file from history::
 
 git filter-branch --index-filter 'git update-index --remove test/org/dragonfly/wunderground/service/TestSaxFeedParser.java' master
+
+//NEW Classes to add:
+------------------------------------ExportableAttribute
+
+package org.dragonfly.wunderground.util;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Tags fields as originating from and XML attribute. When the setters are
+ * called for this field it expects the field name to be formatted as
+ * "tagname"+"AttributeName] propercase on the attribute name.
+ * 
+ * @author leeclarke
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface ExportableAttribute {
+	/**
+	 * Parent Tag in which the attribute is contained.
+	 * 
+	 * @return
+	 */
+	String tag() default "";
+
+	/**
+	 * Xml tag name to use for parsing
+	 * 
+	 * @return
+	 */
+	String xmlName() default ""; // Won't accept null;
+
+	/**
+	 * Exported JSON name if different then xmlName
+	 * 
+	 * @return
+	 */
+	String jsonName() default "";
+}
+
+--------------------------- ALERT
+package org.dragonfly.wunderground.domain;
+
+import org.dragonfly.wunderground.service.Exportable;
+import org.dragonfly.wunderground.util.ExportableAttribute;
+
+/**
+ * Contains data resulting from an Alert notification
+ * @author leeclarke
+ */
+public class Alert extends DragonflyDomain
+{
+	public static final String root = "AlertItem";
+	
+	@Exportable(xmlName = "type")
+	private String type;
+	
+	@Exportable(xmlName = "description")
+	private String description;
+	
+	@Exportable(xmlName = "date")
+	private String date;
+	
+	@Exportable(xmlName = "expires")
+	private String expires;
+
+	@ExportableAttribute(tag = "date", xmlName = "epoch", jsonName = "dateEpoch")
+	private String dateEpoch;
+
+	@ExportableAttribute(tag = "expires", xmlName = "epoch", jsonName = "expiresEpoch")
+	private String expiresEpoch;
+
+	@Exportable(xmlName = "message")
+	private String message;
+	
+	@Exportable(xmlName = "phenomena")
+	private String phenomena;
+	
+	@Exportable(xmlName = "significance")
+	private String significance;
+
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public String getDate()
+	{
+		return date;
+	}
+
+	public void setDate(String date)
+	{
+		this.date = date;
+	}
+
+	public String getExpires()
+	{
+		return expires;
+	}
+
+	public void setExpires(String expires)
+	{
+		this.expires = expires;
+	}
+
+	public String getDateEpoch()
+	{
+		return dateEpoch;
+	}
+
+	public void setDateEpoch(String dateEpoch)
+	{
+		this.dateEpoch = dateEpoch;
+	}
+
+	public String getExpiresEpoch()
+	{
+		return expiresEpoch;
+	}
+
+	public void setExpiresEpoch(String expiresEpoch)
+	{
+		this.expiresEpoch = expiresEpoch;
+	}
+
+	public String getMessage()
+	{
+		return message;
+	}
+
+	public void setMessage(String message)
+	{
+		this.message = message;
+	}
+
+	public String getPhenomena()
+	{
+		return phenomena;
+	}
+
+	public void setPhenomena(String phenomena)
+	{
+		this.phenomena = phenomena;
+	}
+
+	public String getSignificance()
+	{
+		return significance;
+	}
+
+	public void setSignificance(String significance)
+	{
+		this.significance = significance;
+	}
+		
+}
+
+----------------------- AlertHandler
+package org.dragonfly.wunderground.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.dragonfly.wunderground.domain.Alert;
+import org.dragonfly.wunderground.domain.DragonflyDomain;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+/**
+ * Sax handler for the WeatherUndergrounds Alerts Ws located at:  
+ * 
+ * http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=[zip_Code] 
+ * @author leeclarke
+ */
+public class AlertHandler extends DragonflySaxHandler
+{
+
+	private List<Alert> alerts;
+	private Alert currAlert;
+
+	@Override
+	public void endElement(String uri, String localName, String name) throws SAXException
+	{
+		if(currAlert == null)
+			return;
+		if(Alert.root.equalsIgnoreCase(getNextToLastOnStack()))
+		{
+			setBeanValue(this.currAlert, name);
+		}
+		if(Alert.root.equalsIgnoreCase(name) || Alert.root.equalsIgnoreCase(localName))
+		{
+			this.alerts.add(this.currAlert);
+		}
+		closeTag();
+	}
+	
+	@Override
+	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException
+	{
+		
+		if(Alert.root.equalsIgnoreCase(name) || Alert.root.equalsIgnoreCase(localName))
+		{
+			this.currAlert = new Alert();
+		}
+		else if(attributes.getLength() > 0)
+		{
+			setBeanAttributes(this.currAlert, name, attributes);
+		}
+		updateStack(name);
+	}
+
+	@Override
+	public void startDocument() throws SAXException
+	{
+		alerts = new ArrayList<Alert>();
+		builder = new StringBuilder();
+	}
+	
+	@Override
+	public List<? extends DragonflyDomain> getRootItems()
+	{
+		return this.alerts;
+	}
+
+}
+
+-------------------------- TestAlertHandler  
+
+package org.dragonfly.wunderground.service;
+
+import java.util.List;
+
+import junit.framework.TestCase;
+
+import org.apache.log4j.Logger;
+import org.dragonfly.wunderground.domain.Alert;
+import org.dragonfly.wunderground.exception.DragonflySaxException;
+
+public class TestAlertHandler  extends TestCase
+{
+	public static final String alertUrl = "http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=";
+	
+	private static final Logger logger = Logger.getLogger(TestAlertHandler.class);
+	
+	public void testAlertRetrieval() throws DragonflySaxException
+	{
+		//This might be hard to test because at any given time there may be no alerts for a given zip.
+		String alertZip = "86445"; //They seem to have frequent fire alerts here.
+		String feedUrl = alertUrl + alertZip;
+		logger.debug("connect url: "+ feedUrl);
+		DragonflySaxParser sfp = new DragonflySaxParser(feedUrl, new AlertHandler());
+
+		
+		List<Alert> results = (List<Alert>) sfp.parse();
+		assertNotNull(results);
+		assertTrue(results.size()>0); //No guarantee that results will be returned!
+		logger.debug(results);
+//		assertEquals(airport, results.get(0).getStation_id());
+		
+	}
+}
+
