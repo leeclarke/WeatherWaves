@@ -32,7 +32,6 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException
 	{
-		super.characters(ch, start, length);
 		builder.append(ch, start, length);
 	}
 
