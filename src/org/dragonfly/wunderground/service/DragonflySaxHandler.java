@@ -1,11 +1,16 @@
 package org.dragonfly.wunderground.service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
+import org.dragonfly.wunderground.domain.DragonflyDomain.BeanAttributeMap;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -60,7 +65,7 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 	}
 
 	/**
-	 * Helper method because the code just keeps repeating..
+	 * Helper method which will determine what bean method to call and will also check for tag attributes that need to be set  
 	 * 
 	 * @param dbean
 	 *            - Domain bean to set
@@ -82,7 +87,53 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 				logger.error("Error invoking Method for: " + name, e);
 			}
 		}
+	}
+	
+	/**
+	 * @param name
+	 * @param attributes
+	 */
+	protected void setBeanAttributes(DragonflyDomain dbean, String name, Attributes attributes)
+	{
+		List<BeanAttributeMap> beanAttrs = getAttributes(dbean, name);
+		if(dbean != null && attributes != null)
+		{
+			for (BeanAttributeMap beanAtt : beanAttrs)
+			{
+				logger.debug(">>>>"+beanAtt);
+				String mthName = BeanUtil.getMethodName(beanAtt.getFieldName());
+				logger.debug("mthName=="+mthName);
+				try
+				{
+					BeanUtil.invokeMethod(dbean, mthName, new Object[] { attributes.getValue(beanAtt.getXmlName()).trim() }, null);
+				}
+				catch (Exception e)
+				{
+					logger.error("Error invoking Method for: " + name, e);
+				}
+			}
+		}
+		
+	}
 
+	/**
+	 * Checks the bean to see if it expects any fields to be set by xml attributes.
+	 * @param bean
+	 * @param name
+	 * @return
+	 */
+	private List<BeanAttributeMap> getAttributes(DragonflyDomain bean,String name)
+	{
+		List<BeanAttributeMap> list = null;
+		for (BeanAttributeMap attMap : bean.attributeMap)
+		{
+			if(attMap.equals(name))
+			{	
+				if(list == null) list = new ArrayList<BeanAttributeMap>();
+				list.add(attMap);
+			}
+		}	
+		return list;
 	}
 
 	/**
