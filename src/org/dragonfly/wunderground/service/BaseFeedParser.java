@@ -1,17 +1,13 @@
 package org.dragonfly.wunderground.service;
-
+//TODO: Look into to using HTTPClient, might be improved performance. said to retry three times if it cannot connect to the server. Good for mobile apps
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
@@ -45,9 +41,9 @@ public abstract class BaseFeedParser implements FeedParser
 
 	/**
 	 * Attempts to open the XML doc and throws a RuntimeException if fails.
-	 * @return
+	 * @return - Buffered for performance improvements in case of poor connection quality, etc.
 	 */
-	protected InputStream getInputStream()
+	protected BufferedInputStream getInputStream()
 	{
 		byte [] b = new byte[1];
 
@@ -63,7 +59,7 @@ public abstract class BaseFeedParser implements FeedParser
 			}
 			
 		    HttpURLConnection con = (HttpURLConnection) feedUrl.openConnection();
-			return con.getInputStream();
+			return new BufferedInputStream(con.getInputStream());
 		}
 		catch (IOException e)
 		{
@@ -88,37 +84,4 @@ public abstract class BaseFeedParser implements FeedParser
 		this.proxyPswd = pswd;
 		this.useProxy  = true;
 	}
-	
-//	/**
-//	 * 
-//	 * @return - Proxy connection or null if no proxy.
-//	 */
-//	protected Proxy getProxy()
-//	{
-//		
-//		List<Proxy> l = null;
-//		try {
-//		  l = ProxySelector.getDefault().select(this.feedUrl.toURI());
-//		}
-//		catch (URISyntaxException e) {
-//		  e.printStackTrace();
-//		}
-//
-//		if (l != null) {
-//			for (Proxy proxy : l)
-//			{
-//		      logger.debug("proxy hostname : " + proxy.type());
-//		      InetSocketAddress addr = (InetSocketAddress) proxy.address();
-//		      if (addr == null) {
-//		    	  logger.debug("No Proxy");
-//		      } 
-//		      else {
-//		    	  logger.debug("proxy hostname : " + addr.getHostName());
-//		    	  logger.debug("proxy port : " + addr.getPort());
-//		      }
-//		   }
-//			return l.get(0);
-//		}
-//		return Proxy.NO_PROXY;
-//	}
 }
