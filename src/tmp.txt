@@ -7,216 +7,360 @@ Example Remove a file from history::
 
 git filter-branch --index-filter 'git update-index --remove test/org/dragonfly/wunderground/service/TestSaxFeedParser.java' master
 
+//Shuffle
 //NEW Classes to add:
-------------------------------------ExportableAttribute
+--------------------------------
 
-package org.dragonfly.wunderground.util;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-/**
- * Tags fields as originating from and XML attribute. When the setters are
- * called for this field it expects the field name to be formatted as
- * "tagname"+"AttributeName] propercase on the attribute name.
- * 
- * @author leeclarke
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface ExportableAttribute {
-	/**
-	 * Parent Tag in which the attribute is contained.
-	 * 
-	 * @return
-	 */
-	String tag() default "";
-
-	/**
-	 * Xml tag name to use for parsing
-	 * 
-	 * @return
-	 */
-	String xmlName() default ""; // Won't accept null;
-
-	/**
-	 * Exported JSON name if different then xmlName
-	 * 
-	 * @return
-	 */
-	String jsonName() default "";
-}
-
---------------------------- ALERT
 package org.dragonfly.wunderground.domain;
 
-import org.dragonfly.wunderground.service.Exportable;
-import org.dragonfly.wunderground.util.ExportableAttribute;
+import org.dragonfly.wunderground.util.Exportable;
 
-/**
- * Contains data resulting from an Alert notification
- * @author leeclarke
- */
-public class Alert extends DragonflyDomain
+public class MoonPhase extends DragonflyDomain
 {
-	public static final String root = "AlertItem";
+	public static final String root = "moon_phase";
 	
-	@Exportable(xmlName = "type")
+	@Exportable(xmlName="percentIlluminated")
+	private String percentIlluminated;
+	
+	@Exportable(xmlName="ageOfMoon")
+	private String ageOfMoon;
+
+	
+	// <current_time>
+	// <hour>8</hour>
+	// <minute>05</minute>
+	// </current_time>
+	// <sunset>
+	// <hour>20</hour>
+	// <minute>27</minute>
+	// </sunset>
+	//
+	// <sunrise>
+	// <hour>5</hour>
+	// <minute>14</minute>
+	// </sunrise>
+	
+	public String getPercentIlluminated()
+	{
+		return percentIlluminated;
+	}
+
+	public void setPercentIlluminated(String percentIlluminated)
+	{
+		this.percentIlluminated = percentIlluminated;
+	}
+
+	public String getAgeOfMoon()
+	{
+		return ageOfMoon;
+	}
+
+	public void setAgeOfMoon(String ageOfMoon)
+	{
+		this.ageOfMoon = ageOfMoon;
+	}
+
+}
+
+----------------------------------
+package org.dragonfly.wunderground.domain;
+
+import org.dragonfly.wunderground.util.Exportable;
+
+public class ForecastDay  extends DragonflyDomain
+{
+	public static final String root = "forecastday";
+	
+	@Exportable(xmlName="type")
 	private String type;
 	
-	@Exportable(xmlName = "description")
-	private String description;
+	@Exportable(xmlName="title")
+	private String title;
 	
-	@Exportable(xmlName = "date")
-	private String date;
+	@Exportable(xmlName="period")
+	private String period;
 	
-	@Exportable(xmlName = "expires")
-	private String expires;
-
-	@ExportableAttribute(tag = "date", xmlName = "epoch", jsonName = "dateEpoch")
-	private String dateEpoch;
-
-	@ExportableAttribute(tag = "expires", xmlName = "epoch", jsonName = "expiresEpoch")
-	private String expiresEpoch;
-
-	@Exportable(xmlName = "message")
-	private String message;
+	@Exportable(xmlName="conditions")
+	private String conditions;
 	
-	@Exportable(xmlName = "phenomena")
-	private String phenomena;
+	@Exportable(xmlName="skyicon")
+	private String skyicon;
 	
-	@Exportable(xmlName = "significance")
-	private String significance;
+	@Exportable(xmlName="pop")
+	private String pop;
+	
+	@Exportable(xmlName="icon")
+	private String icon; // the only indicator of sky condition.
+	
+	@Exportable(xmlName="fcttext")
+	private String fcttext;
+	
+	@Exportable(xmlName="date_pretty")
+	private String date_pretty;
+	
+	@Exportable(xmlName="high_fahrenheit")
+	private String high_fahrenheit;
+	
+	@Exportable(xmlName="high_celsius")
+	private String high_celsius;
 
+	@Exportable(xmlName="low_fahrenheit")
+	private String low_fahrenheit;
+	
+	@Exportable(xmlName="low_celsius")
+	private String low_celsius;
+	
 	public String getType()
 	{
 		return type;
 	}
-
 	public void setType(String type)
 	{
 		this.type = type;
 	}
-
-	public String getDescription()
+	public String getPeriod()
 	{
-		return description;
+		return period;
+	}
+	public void setPeriod(String period)
+	{
+		this.period = period;
+	}
+	public String getConditions()
+	{
+		return conditions;
+	}
+	public void setConditions(String conditions)
+	{
+		this.conditions = conditions;
+	}
+	public String getSkyicon()
+	{
+		return skyicon;
+	}
+	public void setSkyicon(String skyicon)
+	{
+		this.skyicon = skyicon;
+	}
+	public String getPop()
+	{
+		return pop;
+	}
+	public void setPop(String pop)
+	{
+		this.pop = pop;
+	}
+	public String getIcon()
+	{
+		return icon;
+	}
+	public void setIcon(String icon)
+	{
+		this.icon = icon;
+	}
+	public String getFcttext()
+	{
+		return fcttext;
+	}
+	public void setFcttext(String fcttext)
+	{
+		this.fcttext = fcttext;
+	}
+	public String getDate_pretty()
+	{
+		return date_pretty;
+	}
+	public void setDate_pretty(String date_pretty)
+	{
+		this.date_pretty = date_pretty;
+	}
+	public String getHigh_fahrenheit()
+	{
+		return high_fahrenheit;
+	}
+	public void setHigh_fahrenheit(String high_fahrenheit)
+	{
+		this.high_fahrenheit = high_fahrenheit;
+	}
+	public String getHigh_celsius()
+	{
+		return high_celsius;
+	}
+	public void setHigh_celsius(String high_celsius)
+	{
+		this.high_celsius = high_celsius;
+	}
+	public String getLow_fahrenheit()
+	{
+		return low_fahrenheit;
+	}
+	public void setLow_fahrenheit(String low_fahrenheit)
+	{
+		this.low_fahrenheit = low_fahrenheit;
+	}
+	public String getLow_celsius()
+	{
+		return low_celsius;
+	}
+	public void setLow_celsius(String low_celsius)
+	{
+		this.low_celsius = low_celsius;
 	}
 
-	public void setDescription(String description)
+	public String getTitle()
 	{
-		this.description = description;
+		return title;
 	}
-
-	public String getDate()
+	public void setTitle(String title)
 	{
-		return date;
+		this.title = title;
 	}
-
-	public void setDate(String date)
-	{
-		this.date = date;
-	}
-
-	public String getExpires()
-	{
-		return expires;
-	}
-
-	public void setExpires(String expires)
-	{
-		this.expires = expires;
-	}
-
-	public String getDateEpoch()
-	{
-		return dateEpoch;
-	}
-
-	public void setDateEpoch(String dateEpoch)
-	{
-		this.dateEpoch = dateEpoch;
-	}
-
-	public String getExpiresEpoch()
-	{
-		return expiresEpoch;
-	}
-
-	public void setExpiresEpoch(String expiresEpoch)
-	{
-		this.expiresEpoch = expiresEpoch;
-	}
-
-	public String getMessage()
-	{
-		return message;
-	}
-
-	public void setMessage(String message)
-	{
-		this.message = message;
-	}
-
-	public String getPhenomena()
-	{
-		return phenomena;
-	}
-
-	public void setPhenomena(String phenomena)
-	{
-		this.phenomena = phenomena;
-	}
-
-	public String getSignificance()
-	{
-		return significance;
-	}
-
-	public void setSignificance(String significance)
-	{
-		this.significance = significance;
-	}
-		
 }
 
------------------------ AlertHandler
-package org.dragonfly.wunderground.service;
+---------------------------------
+package org.dragonfly.wunderground.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dragonfly.wunderground.domain.Alert;
+import org.dragonfly.wunderground.util.Exportable;
+import org.dragonfly.wunderground.util.ExportableAttribute;
+
+public class Forecast extends DragonflyDomain
+{
+	public static final String root = "forecast";
+	
+	public static final List<String> children = new ArrayList<String>();
+	static{
+		children.add("txt_forecast");
+		children.add("simpleforecast");
+	}
+	
+	@ExportableAttribute(tag = "termsofservice", xmlName = "link", jsonName = "termsofservice")
+	private String termsofservice; //att
+	
+	private List<ForecastDay> txt_forecast;
+	
+	@Exportable(xmlName="date")
+	private String date; //from txt_forecast
+	
+	private List<ForecastDay> simpleforecast;
+	
+	@Exportable(jsonName="moonPhase")
+	private MoonPhase moon_phase;
+
+	public String getTermsofservice()
+	{
+		return termsofservice;
+	}
+	public void setTermsofservice(String termsofservice)
+	{
+		this.termsofservice = termsofservice;
+	}
+	public List<ForecastDay> getTxt_forecast()
+	{
+		return txt_forecast;
+	}
+	public void setTxt_forecast(List<ForecastDay> txt_forecast)
+	{
+		this.txt_forecast = txt_forecast;
+	}
+	public String getDate()
+	{
+		return date;
+	}
+	public void setDate(String date)
+	{
+		this.date = date;
+	}
+	public List<ForecastDay> getSimpleforecast()
+	{
+		return simpleforecast;
+	}
+	public void setSimpleforecast(List<ForecastDay> simpleforecast)
+	{
+		this.simpleforecast = simpleforecast;
+	}
+	public MoonPhase getMoon_phase()
+	{
+		return moon_phase;
+	}
+	public void setMoon_phase(MoonPhase moon_phase)
+	{
+		this.moon_phase = moon_phase;
+	}
+}
+
+---------------------------------
+package org.dragonfly.wunderground.service;
+///TODO: Moon Phase not populating
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dragonfly.wunderground.domain.DragonflyDomain;
+import org.dragonfly.wunderground.domain.Forecast;
+import org.dragonfly.wunderground.domain.ForecastDay;
+import org.dragonfly.wunderground.domain.MoonPhase;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-/**
- * Sax handler for the WeatherUndergrounds Alerts Ws located at:  
- * 
- * http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=[zip_Code] 
- * @author leeclarke
- */
-public class AlertHandler extends DragonflySaxHandler
+public class ForcastHandler  extends DragonflySaxHandler
 {
-
-	private List<Alert> alerts;
-	private Alert currAlert;
-
+	private List<Forecast> forcasts;
+	private Forecast currForcast;
+	private ForecastDay currForcastDay;
+	private MoonPhase currMoonPhase;
+	
+	//allows for tracking of what object is currently being populated, dictated by the parent tag
+	private DragonflyDomain currentlyProcessedObject;
+	
 	@Override
 	public void endElement(String uri, String localName, String name) throws SAXException
 	{
-		if(currAlert == null)
+		if(currForcast == null)
 			return;
-		if(Alert.root.equalsIgnoreCase(getNextToLastOnStack()))
-		{
-			setBeanValue(this.currAlert, name);
+		if(MoonPhase.root.equalsIgnoreCase(name)){
+			this.currForcast.setMoon_phase(this.currMoonPhase);
 		}
-		if(Alert.root.equalsIgnoreCase(name) || Alert.root.equalsIgnoreCase(localName))
+		else if(Forecast.root.equalsIgnoreCase(getNextToLastOnStack()))
 		{
-			this.alerts.add(this.currAlert);
+			setBeanValue(this.currForcast, name);
+		}
+		else if(ForecastDay.root.equalsIgnoreCase(getNextToLastOnStack()))
+		{
+			setBeanValue(this.currForcastDay, name);
+		}
+		else if(ForecastDay.root.equalsIgnoreCase(name))
+		{
+			if(getNextToLastOnStack().equalsIgnoreCase("simpleforecast"))
+			{
+				this.currForcastDay.setType("simpleforecast");
+				if(this.currForcast.getSimpleforecast() == null)
+					this.currForcast.setSimpleforecast(new ArrayList<ForecastDay>());
+				this.currForcast.getSimpleforecast().add(this.currForcastDay);
+			}
+			else
+			{
+				this.currForcastDay.setType("txt_forecast");
+				if(this.currForcast.getTxt_forecast() == null)
+					this.currForcast.setTxt_forecast(new ArrayList<ForecastDay>());
+				this.currForcast.getTxt_forecast().add(this.currForcastDay);
+			}
+		}
+		else if(Forecast.children.contains(getNextToLastOnStack()))
+		{
+			setBeanValue(this.currForcast, name);
+		}
+		else if(currentlyProcessedObject instanceof ForecastDay)
+		{
+			//must be in a child tag, convention is that nested values will have filed name of name+directParentName
+			String fieldName = getNextToLastOnStack()+ "_"+ name;
+			setBeanValue(this.currForcastDay, fieldName);
+		}
+
+		else if(Forecast.root.equalsIgnoreCase(name) || Forecast.root.equalsIgnoreCase(localName))
+		{
+			this.forcasts.add(this.currForcast);
 		}
 		closeTag();
 	}
@@ -224,14 +368,26 @@ public class AlertHandler extends DragonflySaxHandler
 	@Override
 	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException
 	{
-		
-		if(Alert.root.equalsIgnoreCase(name) || Alert.root.equalsIgnoreCase(localName))
+		//TODO: still have the last tag as parent, could use that to check FogcastChildren for their children.
+		if(Forecast.root.equalsIgnoreCase(name) || Forecast.root.equalsIgnoreCase(localName))
 		{
-			this.currAlert = new Alert();
+			this.currForcast = new Forecast();
+			this.currentlyProcessedObject = this.currForcast; 
+		}
+		else if(Forecast.children.contains(name))
+		{
+			this.currForcastDay = new ForecastDay();
+			this.currentlyProcessedObject = this.currForcastDay;
+		}
+		else if(MoonPhase.root.equalsIgnoreCase(name))
+		{
+			this.currMoonPhase = new MoonPhase();
+			this.currentlyProcessedObject = this.currMoonPhase;
 		}
 		else if(attributes.getLength() > 0)
 		{
-			setBeanAttributes(this.currAlert, name, attributes);
+			//TODO: Bombs out if the tag is ignored yet has attributes!
+			setBeanAttributes(this.currForcast, name, attributes);
 		}
 		updateStack(name);
 	}
@@ -239,20 +395,22 @@ public class AlertHandler extends DragonflySaxHandler
 	@Override
 	public void startDocument() throws SAXException
 	{
-		alerts = new ArrayList<Alert>();
+		forcasts = new ArrayList<Forecast>();
 		builder = new StringBuilder();
 	}
+	
+	
+	
 	
 	@Override
 	public List<? extends DragonflyDomain> getRootItems()
 	{
-		return this.alerts;
+		return this.forcasts;
 	}
 
 }
 
--------------------------- TestAlertHandler  
-
+---------------------------------
 package org.dragonfly.wunderground.service;
 
 import java.util.List;
@@ -260,30 +418,29 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
-import org.dragonfly.wunderground.domain.Alert;
+import org.dragonfly.wunderground.domain.Forecast;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 
-public class TestAlertHandler  extends TestCase
+public class TestForcastHandler extends TestCase
 {
-	public static final String alertUrl = "http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=";
-	
-	private static final Logger logger = Logger.getLogger(TestAlertHandler.class);
-	
+	public static final String forcastUrl = "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=";
+
+	private static final Logger logger = Logger.getLogger(TestForcastHandler.class);
+
 	public void testAlertRetrieval() throws DragonflySaxException
 	{
-		//This might be hard to test because at any given time there may be no alerts for a given zip.
-		String alertZip = "86445"; //They seem to have frequent fire alerts here.
-		String feedUrl = alertUrl + alertZip;
-		logger.debug("connect url: "+ feedUrl);
-		DragonflySaxParser sfp = new DragonflySaxParser(feedUrl, new AlertHandler());
+		// This might be hard to test because at any given time there may be no alerts for a given zip.
+		String forcastCity = "33584"; // They seem to have frequent fire alerts here.
+		String feedUrl = forcastUrl + forcastCity;
+		logger.debug("connect url: " + feedUrl);
+		DragonflySaxParser sfp = new DragonflySaxParser(feedUrl, new ForcastHandler());
 
-		
-		List<Alert> results = (List<Alert>) sfp.parse();
+		List<Forecast> results = (List<Forecast>) sfp.parse();
 		assertNotNull(results);
-		assertTrue(results.size()>0); //No guarantee that results will be returned!
+		assertTrue(results.size() > 0);
+
 		logger.debug(results);
-//		assertEquals(airport, results.get(0).getStation_id());
-		
+		// assertEquals(airport, results.get(0).getStation_id());
+
 	}
 }
-
