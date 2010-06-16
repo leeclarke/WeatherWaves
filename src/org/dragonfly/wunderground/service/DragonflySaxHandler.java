@@ -1,5 +1,7 @@
 package org.dragonfly.wunderground.service;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,15 +24,17 @@ import org.xml.sax.helpers.DefaultHandler;
  * If any field in a root bean could specify that it is a bean object then the handler would know what object to set for
  * each level tag.(This could also work for List collections.)
  * 
- * Example : RootBean MyOtherBean - where this would be annotated as a bean object [@BeanObject(collection=true)]implying that a tag would contain
- * Multiple child tags with further data. An example would be an AddressBean. Person.Address as in Person.workAddress a
- * method to specify this as a List of items would also be useful.
+ * Example : RootBean MyOtherBean - where this would be annotated as a bean object
+ * [@BeanObject(collection=true)]implying that a tag would contain Multiple child tags with further data. An example
+ * would be an AddressBean. Person.Address as in Person.workAddress a method to specify this as a List of items would
+ * also be useful.
  * 
- * The processing is simple in the start/end Element methods then 
- * - Each BeanObject should be checked to see if the current tag is a BeanObject, if so create or add to parent bean.
- * - if root is NextToLast() then call setters on the BeanObject
+ * The processing is simple in the start/end Element methods then - Each BeanObject should be checked to see if the
+ * current tag is a BeanObject, if so create or add to parent bean. - if root is NextToLast() then call setters on the
+ * BeanObject
  * 
  * if done right it might eliminate customHandlers for most situations!
+ * 
  * @author leeclarke
  */
 public abstract class DragonflySaxHandler extends DefaultHandler
@@ -65,7 +69,7 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 	}
 
 	/**
-	 * Helper method which will determine what bean method to call and will also check for tag attributes that need to be set  
+	 * Helper method which will determine what bean method to call. be set
 	 * 
 	 * @param dbean
 	 *            - Domain bean to set
@@ -76,11 +80,16 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 	{
 		if (dbean.fields.contains(name))
 		{
+			String mthName = null;
 			try
 			{
-				String mthName = BeanUtil.getMethodName(name);
+				mthName = BeanUtil.getMethodName(name);
 				if (logger.isDebugEnabled()) logger.debug("call:" + mthName);
 				BeanUtil.invokeMethod(dbean, mthName, new Object[] { builder.toString().trim() }, null);
+			}
+			catch(NullPointerException ne)
+			{
+				logger.debug("Input value was null for "+mthName);
 			}
 			catch (Exception e)
 			{
@@ -88,24 +97,26 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 			}
 		}
 	}
-	
+
 	/**
+	 * Sets the given objects fields based on attribute values from the given tag.
 	 * @param name
 	 * @param attributes
 	 */
 	protected void setBeanAttributes(DragonflyDomain dbean, String name, Attributes attributes)
 	{
 		List<BeanAttributeMap> beanAttrs = getAttributes(dbean, name);
-		if(dbean != null && attributes != null)
+		if (beanAttrs != null && dbean != null && attributes != null)
 		{
 			for (BeanAttributeMap beanAtt : beanAttrs)
 			{
-				logger.debug(">>>>"+beanAtt);
+				logger.debug(">>>>" + beanAtt);
 				String mthName = BeanUtil.getMethodName(beanAtt.getFieldName());
-				logger.debug("mthName=="+mthName);
+				logger.debug("mthName==" + mthName);
 				try
 				{
-					BeanUtil.invokeMethod(dbean, mthName, new Object[] { attributes.getValue(beanAtt.getXmlName()).trim() }, null);
+					BeanUtil.invokeMethod(dbean, mthName, new Object[] { attributes.getValue(beanAtt.getXmlName())
+							.trim() }, null);
 				}
 				catch (Exception e)
 				{
@@ -113,26 +124,27 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 				}
 			}
 		}
-		
+
 	}
 
 	/**
 	 * Checks the bean to see if it expects any fields to be set by xml attributes.
+	 * 
 	 * @param bean
 	 * @param name
 	 * @return
 	 */
-	private List<BeanAttributeMap> getAttributes(DragonflyDomain bean,String name)
+	private List<BeanAttributeMap> getAttributes(DragonflyDomain bean, String name)
 	{
 		List<BeanAttributeMap> list = null;
 		for (BeanAttributeMap attMap : bean.attributeMap)
 		{
-			if(attMap.equals(name))
-			{	
-				if(list == null) list = new ArrayList<BeanAttributeMap>();
+			if (attMap.equals(name))
+			{
+				if (list == null) list = new ArrayList<BeanAttributeMap>();
 				list.add(attMap);
 			}
-		}	
+		}
 		return list;
 	}
 
