@@ -2,7 +2,6 @@ package org.dragonfly.wunderground.util;
 
 import junit.framework.TestCase;
 
-import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.domain.Location;
 
 public class TestBeanUtil extends TestCase
