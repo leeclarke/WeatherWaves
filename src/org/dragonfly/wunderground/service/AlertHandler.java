@@ -30,7 +30,7 @@ public class AlertHandler extends DragonflySaxHandler
 		{
 			setBeanValue(this.currAlert, name);
 		}
-		if(Alert.root.equalsIgnoreCase(name) || Alert.root.equalsIgnoreCase(localName))
+		else if(Alert.root.equalsIgnoreCase(name) || Alert.root.equalsIgnoreCase(localName))
 		{
 			this.alerts.add(this.currAlert);
 		}
