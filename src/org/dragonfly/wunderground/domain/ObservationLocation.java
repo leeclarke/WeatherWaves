@@ -3,7 +3,7 @@ package org.dragonfly.wunderground.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dragonfly.wunderground.service.Exportable;
+import org.dragonfly.wunderground.util.Exportable;
 
 public class ObservationLocation extends DragonflyDomain
 {

@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.dragonfly.wunderground.BeanUtil;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.DragonflyDomain.BeanAttributeMap;
+import org.dragonfly.wunderground.util.BeanUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

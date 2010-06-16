@@ -1,7 +1,7 @@
 package org.dragonfly.wunderground.domain;
 
-import org.dragonfly.wunderground.BeanUtil;
-import org.dragonfly.wunderground.service.Exportable;
+import org.dragonfly.wunderground.util.BeanUtil;
+import org.dragonfly.wunderground.util.Exportable;
 
 /**
  * Station TO is contained by a Location.

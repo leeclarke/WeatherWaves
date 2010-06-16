@@ -1,6 +1,6 @@
 package org.dragonfly.wunderground.domain;
 
-import org.dragonfly.wunderground.service.Exportable;
+import org.dragonfly.wunderground.util.Exportable;
 
 public class Radar extends DragonflyDomain
 {
