@@ -83,7 +83,7 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 			String mthName = null;
 			try
 			{
-				mthName = BeanUtil.getMethodName(name);
+				mthName = BeanUtil.getSetterMethodName(name);
 				if (logger.isDebugEnabled()) logger.debug("call:" + mthName);
 				BeanUtil.invokeMethod(dbean, mthName, new Object[] { builder.toString().trim() }, null);
 			}
@@ -111,7 +111,7 @@ public abstract class DragonflySaxHandler extends DefaultHandler
 			for (BeanAttributeMap beanAtt : beanAttrs)
 			{
 				logger.debug(">>>>" + beanAtt);
-				String mthName = BeanUtil.getMethodName(beanAtt.getFieldName());
+				String mthName = BeanUtil.getSetterMethodName(beanAtt.getFieldName());
 				logger.debug("mthName==" + mthName);
 				try
 				{

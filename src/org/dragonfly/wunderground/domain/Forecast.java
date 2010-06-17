@@ -19,11 +19,13 @@ public class Forecast extends DragonflyDomain
 	@ExportableAttribute(tag = "termsofservice", xmlName = "link", jsonName = "termsofservice")
 	private String termsofservice; //att
 	
+	@Exportable(jsonName="shortForecast")
 	private List<ForecastDay> txt_forecast;
 	
 	@Exportable(xmlName="date")
 	private String date; //from txt_forecast
 	
+	@Exportable(jsonName="detailedForecast")
 	private List<ForecastDay> simpleforecast;
 	
 	@Exportable(jsonName="moonPhase")

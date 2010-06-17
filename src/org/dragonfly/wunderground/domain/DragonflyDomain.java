@@ -40,10 +40,13 @@ public class DragonflyDomain
 				{
 					// Add to list of exposed fields, helps the setter know what
 					// fields are being imported from xml.
+					Exportable expField = (Exportable) annotation;
+					if(expField.xmlName() == null || expField.xmlName().trim().length() == 0)
+						continue;
 					fields.add(field.getName());
-					Exportable myAnnotation = (Exportable) annotation;
-					logger.debug("field [" + field.getName() + "] \n\txml:: " + myAnnotation.xmlName() + "\n\tjson:: "
-							+ myAnnotation.jsonName());
+					
+					logger.debug("field [" + field.getName() + "] \n\txml:: " + expField.xmlName() + "\n\tjson:: "
+							+ expField.jsonName());
 				}
 				else if (annotation instanceof ExportableAttribute)
 				{

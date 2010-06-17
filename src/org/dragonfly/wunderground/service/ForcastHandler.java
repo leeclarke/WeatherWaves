@@ -25,12 +25,17 @@ public class ForcastHandler  extends DragonflySaxHandler
 	{
 		if(currForcast == null)
 			return;
-		if(MoonPhase.root.equalsIgnoreCase(name)){
-			this.currForcast.setMoon_phase(this.currMoonPhase);
+		if(MoonPhase.root.equalsIgnoreCase(getNextToLastOnStack())){
+			setBeanValue(this.currMoonPhase,name);
 		}
 		else if(Forecast.root.equalsIgnoreCase(getNextToLastOnStack()))
 		{
-			setBeanValue(this.currForcast, name);
+			if(MoonPhase.root.equalsIgnoreCase(name)){
+				this.currForcast.setMoon_phase(this.currMoonPhase);
+				this.currentlyProcessedObject = null;
+			}
+			else
+				setBeanValue(this.currForcast, name);
 		}
 		else if(ForecastDay.root.equalsIgnoreCase(getNextToLastOnStack()))
 		{
@@ -57,13 +62,19 @@ public class ForcastHandler  extends DragonflySaxHandler
 		{
 			setBeanValue(this.currForcast, name);
 		}
-		else if(currentlyProcessedObject instanceof ForecastDay)
+		else if(currentlyProcessedObject instanceof MoonPhase)
 		{
 			//must be in a child tag, convention is that nested values will have filed name of name+directParentName
+			String fieldName = getNextToLastOnStack()+ "_"+ name+"";
+			setBeanValue(this.currMoonPhase, fieldName);
+		}
+		else if(currentlyProcessedObject instanceof ForecastDay)
+		{
+			//must be in a child tag, convention is that nested values will have field name of directParentName+name
 			String fieldName = getNextToLastOnStack()+ "_"+ name;
 			setBeanValue(this.currForcastDay, fieldName);
+			this.currentlyProcessedObject = null;
 		}
-
 		else if(Forecast.root.equalsIgnoreCase(name) || Forecast.root.equalsIgnoreCase(localName))
 		{
 			this.forcasts.add(this.currForcast);
@@ -74,13 +85,12 @@ public class ForcastHandler  extends DragonflySaxHandler
 	@Override
 	public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException
 	{
-		//TODO: still have the last tag as parent, could use that to check FogcastChildren for their children.
 		if(Forecast.root.equalsIgnoreCase(name) || Forecast.root.equalsIgnoreCase(localName))
 		{
 			this.currForcast = new Forecast();
 			this.currentlyProcessedObject = this.currForcast; 
 		}
-		else if(Forecast.children.contains(name))
+		else if(ForecastDay.root.equalsIgnoreCase(name))
 		{
 			this.currForcastDay = new ForecastDay();
 			this.currentlyProcessedObject = this.currForcastDay;
@@ -103,9 +113,6 @@ public class ForcastHandler  extends DragonflySaxHandler
 		forcasts = new ArrayList<Forecast>();
 		builder = new StringBuilder();
 	}
-	
-	
-	
 	
 	@Override
 	public List<? extends DragonflyDomain> getRootItems()

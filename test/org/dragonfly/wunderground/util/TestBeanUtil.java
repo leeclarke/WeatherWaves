@@ -34,7 +34,7 @@ public class TestBeanUtil extends TestCase
 	{
 		String property = "state";
 		String expected = "setState";
-		String rtnName = BeanUtil.getMethodName(property);
+		String rtnName = BeanUtil.getSetterMethodName(property);
 		
 		assertEquals(expected, rtnName);
 	}
