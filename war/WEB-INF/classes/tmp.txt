@@ -1,0 +1,9 @@
+TODO: 
+1. Convert from log4j to JAva logger to get rid of dependancy.
+
+
+
+Example Remove a file from history::
+
+git filter-branch --index-filter 'git update-index --remove test/org/dragonfly/wunderground/service/TestSaxFeedParser.java' master
+

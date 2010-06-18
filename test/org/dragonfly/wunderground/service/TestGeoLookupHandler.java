@@ -2,20 +2,19 @@ package org.dragonfly.wunderground.service;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.Logger;
 import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class TestGeoLookupHandler
+public class TestGeoLookupHandler extends TestCase
 {
 	public static final String geoBaseURL = "http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=";
 	
 	private static final Logger logger = Logger.getLogger(TestGeoLookupHandler.class);
 
 	@SuppressWarnings("unchecked")
-	@Test
 	public void testParse_zip() throws DragonflySaxException
 	{
 		String zip = "33584";
@@ -32,7 +31,6 @@ public class TestGeoLookupHandler
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Test
 	public void testParse_NonSpecificCity() throws DragonflySaxException
 	{
 		//Testing with city of Tampa returns 2 <Locations>
@@ -51,7 +49,6 @@ public class TestGeoLookupHandler
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Test (expected = DragonflySaxException.class)
 	public void testParse_InvalidInput() throws DragonflySaxException
 	{
 		//bad input causes fault
@@ -61,7 +58,6 @@ public class TestGeoLookupHandler
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Test
 	public void testParse_NoResult() throws DragonflySaxException
 	{
 		//Non-sense to produce no result
