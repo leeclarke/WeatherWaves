@@ -11,6 +11,8 @@ import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 
+import com.google.gson.Gson;
+
 /**
  * Actual service object which effectively provides a unified interface for making calls to the WU SaxHandlers.
  * Functional business logic will be contained at this point providing both direct access to the service results as well
@@ -51,6 +53,21 @@ public class WUService
 		return null;
 	}
 
+	
+	/**
+	 * Returns the Location search results as JSON formatted data.
+	 * @param queryStr
+	 * @return
+	 * @throws DragonflySaxException
+	 */
+	public String getGeoLocationJSON(String queryStr) throws DragonflySaxException
+	{
+		List<Location> locResults = this.getGeoLocationData(queryStr);
+		Gson gson = new Gson();
+		
+		return gson.toJson(locResults);
+	}
+	
 	/**
 	 * 
 	 * @param queryStr
@@ -92,6 +109,20 @@ public class WUService
 		}
 		return results;
 	}
+	
+	/**
+	 * Converts the Forcast results into JSON.
+	 * @param queryStr
+	 * @return
+	 * @throws DragonflySaxException
+	 */
+	public String getForcastJSON(String queryStr) throws DragonflySaxException
+	{
+		List<Forecast> results = getForecast(queryStr);
+		Gson gson = new Gson();
+		
+		return gson.toJson(results);
+	}
 
 	/**
 	 * 
@@ -112,6 +143,22 @@ public class WUService
 	}
 
 	/**
+	 * Converts the Alerts results into JSON.
+	 * @param queryStr
+	 * @return
+	 * @throws DragonflySaxException
+	 */
+	public String getAlertsJSON(String queryStr) throws DragonflySaxException
+	{
+		List<Alert> results = getAlerts(queryStr);
+		Gson gson = new Gson();
+		
+		return gson.toJson(results);
+		
+		
+	}
+	
+	/**
 	 * @param queryStr
 	 *            - airport or pws station id, best option is to retrieve the list of station ids from the get
 	 *            GeoLocationData service first.
@@ -125,6 +172,13 @@ public class WUService
 		if (queryStr != null && queryStr.trim().length() > 0)
 		{
 			String feedUrl = null;
+			if(queryStr.length() >4)
+			{
+				feedUrl = PWS_BASE_URL;
+			}
+			else
+				feedUrl = OBSERVATION_BASE_URL;
+			
 			//TODO: Determine if requesting a PWS station, what are rules? Looks like they all contain the word 'LOCAL'
 			//if cant tell then treat as regular.
 			
@@ -133,5 +187,18 @@ public class WUService
 		}
 		return results;
 	}
-
+	
+	/**
+	 * Converts the Current Conditions results in JSON format.
+	 * @param queryStr
+	 * @return
+	 * @throws DragonflySaxException
+	 */
+	public String getCurrentConditionsJSON(String queryStr) throws DragonflySaxException
+	{
+		List<WeatherObservation> results = getCurrentConditions(queryStr);
+		Gson gson = new Gson();
+		
+		return gson.toJson(results);
+	}
 }

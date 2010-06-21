@@ -20,6 +20,16 @@ public class TestWUService extends TestCase
 		System.out.println(locs);
 	}
 
+	public void testGetGeoLocationJSON() throws DragonflySaxException
+	{
+		String zipCode = "33584";
+		WUService wuService = new WUService();
+		String jsonRtn = wuService.getGeoLocationJSON(zipCode);
+		assertNotNull(jsonRtn);
+		
+		System.out.println("JSON results: "+jsonRtn);
+	}
+	
 	public void testGetForecast()
 	{
 		fail("Not yet implemented");
