@@ -84,7 +84,7 @@ public class WeatherWaveRobot extends AbstractRobot
 			while (m.find())
 			{
 				String query = text.substring(m.start() + 4, m.end() - 1);
-				debug.append("<br>formula=").append(query);
+				debug.append("\nWW_query= ").append(query);
 				String rtn = "";
 				if (query.contains("|"))
 				{
@@ -106,7 +106,12 @@ public class WeatherWaveRobot extends AbstractRobot
 			debug.append("pattern ct match=").append(i);
 		} catch (Exception e)
 		{
-			debug.append("Captin we have a problem!" + e);
+			debug.append("Captain we have a problem!" + e);
+			blip.append("Oops something has gone terribly wrong! OK not really but, you might have found a bug or " +
+					"the weather service is on the fritz. If the problem persists add |debug to the end of your WW " +
+					"query like this:  [query|command|debug] (WW code omitted intentionally) and send me the junk in " +
+					"the debug blip and I'll have our vast army of code monkeys puzzle it over (and fix it if they want " +
+					"any more bananas and Mtn. Dew!)");
 		}
 		debug.append("    Weatherwaves has tried to update.");
 		if(debugBlip)
@@ -126,7 +131,7 @@ public class WeatherWaveRobot extends AbstractRobot
 		String rtn = null;
 		//remove debug keyword
 		query = query.contains(DEBUG)? query.substring(0,query.indexOf(DEBUG)-1):query;
-		StringTokenizer st = new StringTokenizer("|");
+		StringTokenizer st = new StringTokenizer(query,"|");
 		if(st.countTokens() == 1)
 			rtn =  new WUService().getCurrentConditionsJSON(query);
 		else
