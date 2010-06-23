@@ -1,11 +1,11 @@
 TODO: 
 1. Finish bot replace capability.
-2. Test all JSON WS functions
+X. Test all JSON WS functions [done]
 3. Add App Engine Index page.
 4. Write Docs
 5. Test on Android 
-6. Ant Build Script and downloadables.
-7. Convert from log4j to JAva logger to get rid of dependancy.
+6. Ant Build Script and download files.
+7. Convert from log4j to Java logger to get rid of dependancy.
 8. JavaDoc/code review
 
 
