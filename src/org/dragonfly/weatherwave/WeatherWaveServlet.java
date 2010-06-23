@@ -31,7 +31,6 @@ public class WeatherWaveServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
-		// TODO: Switch on request types and call service
 		String cmd = req.getParameter(WEATHER_REQ_TYPE);
 		String query = req.getParameter(QUERY);
 		WUService wuService = new WUService();
@@ -82,7 +81,8 @@ public class WeatherWaveServlet extends HttpServlet
 		} 
 		else
 		{
-			resp.getWriter().println("WeatherWave Test Page. App Coming soon!   cmd=" + cmd);
+			//TODO: display a test page w query textbox, drop down with cmd options, and submit button.
+			resp.getWriter().println("WeatherWave Test Page. App Coming soon!  " );
 		}
 	}
 }
