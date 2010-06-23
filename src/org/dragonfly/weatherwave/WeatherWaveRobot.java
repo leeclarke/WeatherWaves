@@ -16,8 +16,15 @@ import com.google.wave.api.event.WaveletSelfAddedEvent;
 @SuppressWarnings("serial")
 public class WeatherWaveRobot extends AbstractRobot
 {
+	private static final String ERROR_MSG = "Oops something has gone terribly wrong! OK not really but, you might have found a bug or " +
+						"the weather service is on the fritz. If the problem persists add |debug to the end of your WW " +
+						"query like this:  [query|command|debug] (WW code omitted intentionally) and send me the junk in " +
+						"the debug blip and I'll have our vast army of code monkeys puzzle it over (and fix it if they want " +
+						"any more bananas and Mtn. Dew!)";
 	private static final String DEBUG = "debug";
 	private static final String BOT_HELP_URL = "http://weatherwaves.appsopt.com";
+	private static final String INITIAL_CONTENT_MSG = "\nYou have added WeatherWaves to your wave. Insert current local weather information from the wundergound.com \nFor instructions on use check out our help page."
+									+ BOT_HELP_URL + " to getinstructions";
 	// TODO: Ensure only one match at a time. Currently it could match multiples
 	// at once.
 	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]";// regex:
@@ -45,11 +52,7 @@ public class WeatherWaveRobot extends AbstractRobot
 	@Override
 	public void onWaveletSelfAdded(WaveletSelfAddedEvent event)
 	{
-		Blip blip = event
-				.getWavelet()
-				.reply(
-						"\nYou have added WeatherWaves to your wave. Insert current local weather information from the wundergound.com \nFor instructions on use check out our help page."
-								+ BOT_HELP_URL + " to getinstructions");
+		Blip blip = event.getWavelet().reply(INITIAL_CONTENT_MSG);
 	}
 
 	/**
@@ -107,11 +110,7 @@ public class WeatherWaveRobot extends AbstractRobot
 		} catch (Exception e)
 		{
 			debug.append("Captain we have a problem!" + e);
-			blip.append("Oops something has gone terribly wrong! OK not really but, you might have found a bug or " +
-					"the weather service is on the fritz. If the problem persists add |debug to the end of your WW " +
-					"query like this:  [query|command|debug] (WW code omitted intentionally) and send me the junk in " +
-					"the debug blip and I'll have our vast army of code monkeys puzzle it over (and fix it if they want " +
-					"any more bananas and Mtn. Dew!)");
+			blip.append(ERROR_MSG);
 		}
 		debug.append("    Weatherwaves has tried to update.");
 		if(debugBlip)
