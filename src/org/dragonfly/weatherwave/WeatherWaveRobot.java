@@ -9,8 +9,8 @@ import org.dragonfly.wunderground.service.WUService;
 
 import com.google.wave.api.AbstractRobot;
 import com.google.wave.api.Blip;
+import com.google.wave.api.BlipContentRefs;
 import com.google.wave.api.event.DocumentChangedEvent;
-import com.google.wave.api.event.WaveletParticipantsChangedEvent;
 import com.google.wave.api.event.WaveletSelfAddedEvent;
 
 @SuppressWarnings("serial")
@@ -25,11 +25,9 @@ public class WeatherWaveRobot extends AbstractRobot
 	private static final String BOT_HELP_URL = "http://weatherwaves.appsopt.com";
 	private static final String INITIAL_CONTENT_MSG = "\nYou have added WeatherWaves to your wave. Insert current local weather information from the wundergound.com \nFor instructions on use check out our help page."
 									+ BOT_HELP_URL + " to getinstructions";
-	// TODO: Ensure only one match at a time. Currently it could match multiples
-	// at once.
-	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]";// regex:
-
-	// @WW\[.....*\]
+	// TODO: Ensure only one match at a time. Currently it could match multiples at once.
+	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]";
+	// regex: @WW\[.....*\]
 
 	@Override
 	protected String getRobotName()
@@ -52,7 +50,7 @@ public class WeatherWaveRobot extends AbstractRobot
 	@Override
 	public void onWaveletSelfAdded(WaveletSelfAddedEvent event)
 	{
-		Blip blip = event.getWavelet().reply(INITIAL_CONTENT_MSG);
+		event.getWavelet().reply(INITIAL_CONTENT_MSG);
 	}
 
 	/**
@@ -101,7 +99,11 @@ public class WeatherWaveRobot extends AbstractRobot
 				
 				if(rtn != null)
 				{
-					blip.all("@WW[" + query + "]").replace("\n" + rtn);
+					//TODO: Try replacing the current text tag with a Title and inser an inline Blip aafter it?
+					Blip weatherBlip = blip.insertInlineBlip(m.start());
+					weatherBlip.appendMarkup("<b>Rendered Weather Marup goes here!</b>");
+					BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n" + rtn);
+					
 				}
 				
 				i++;
@@ -115,7 +117,7 @@ public class WeatherWaveRobot extends AbstractRobot
 		debug.append("    Weatherwaves has tried to update.");
 		if(debugBlip)
 		{
-			Blip dbgblip = event.getWavelet().reply(debug.toString());
+			event.getWavelet().reply(debug.toString());
 		}
 	}
 
