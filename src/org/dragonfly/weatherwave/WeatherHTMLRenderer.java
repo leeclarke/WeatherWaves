@@ -2,6 +2,8 @@ package org.dragonfly.weatherwave;
 
 import java.util.List;
 
+import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.dragonfly.wunderground.domain.Alert;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Forecast;
@@ -86,17 +88,19 @@ public class WeatherHTMLRenderer
 	
 	protected static String renderCurrentConditions(WeatherObservation obs)
 	{
-		StringBuilder sb = new StringBuilder();
-		if(obs != null)
+		if(obs == null)
+			throw new NullPointerException("WeatherObservation obejct is null");
+		StringTemplateGroup templateGroup = new StringTemplateGroup("WeatherObs", "templates");
+		StringTemplate obsDisplay = templateGroup.getInstanceOf("ObsDisplay"); 
+		obsDisplay.setAttribute("observation_time", obs.getObservation_time());
+		if(obs.getDisplay_location() != null)
 		{
-			sb.append("<table>");
-			sb.append("<tr><th colspan='2'>").append("").append("</th></tr>");
-			sb.append("<tr><td>").append("").append("</td></tr>");
-			sb.append("<tr><td>").append("").append("</td></tr>");
-			sb.append("</table>");
+			obsDisplay.setAttribute("display_location_city", obs.getDisplay_location().getCity());
+			obsDisplay.setAttribute("display_location_state", obs.getDisplay_location().getState());
+			obsDisplay.setAttribute("display_location_zip", obs.getDisplay_location().getZip());
 		}
 		
-		return sb.toString();
+		return obsDisplay.toString();
 	}
 	
 	protected static String renderLocations(Location loc)
@@ -135,3 +139,4 @@ public class WeatherHTMLRenderer
 		return sb.toString();
 	}
 }
+
