@@ -179,12 +179,12 @@ public class WUService
 		if (queryStr != null && queryStr.trim().length() > 0)
 		{
 			String feedUrl = null;
-			if(queryStr.length() >4)
-			{
-				feedUrl = PWS_BASE_URL;
-			}
-			else
-				feedUrl = OBSERVATION_BASE_URL;
+//			if(queryStr.length() >4)
+//			{
+//				feedUrl = PWS_BASE_URL;  //Not sure how to id PWS calls w/o directly calling them seperatly.
+//			}
+//			else
+				feedUrl = OBSERVATION_BASE_URL +queryStr;
 			
 			//TODO: Determine if requesting a PWS station, what are rules? Looks like they all contain the word 'LOCAL'
 			//if cant tell then treat as regular.
