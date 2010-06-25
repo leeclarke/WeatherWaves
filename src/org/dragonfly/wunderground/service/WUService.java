@@ -1,7 +1,5 @@
 package org.dragonfly.wunderground.service;
 
-/*TODO: probably want to create a JSON_WUService that in turn calls this service and then produces JSON formatted 
- * string results. Can worry about this after Service is finished.*/
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +21,7 @@ import com.google.gson.Gson;
 public class WUService
 {
 	// TODO: Extract to a properties file so that if this changes in the future it wont require a recompile to fix.
+	//TODO: Also include Proxy settings in the properties file!
 	public static final String GEO_BASE_URL = "http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=";
 
 	public static final String FORECAST_BASE_Url = "http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=";
@@ -31,6 +30,12 @@ public class WUService
 	public static final String PWS_BASE_URL = "http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID=";
 
 	public static final String ALERT_BASE_URL = "http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=";
+
+	private String proxyServer = null;
+
+	private String proxyUser = null;
+
+	private String proxyPassword = null;
 
 	/**
 	 * Retrieves a thin list of geo location data simply to let the user pick their preferred location. The primary goal
@@ -83,6 +88,7 @@ public class WUService
 		if (queryStr != null && queryStr.trim().length() > 0)
 		{
 			DragonflySaxParser sfp = new DragonflySaxParser(GEO_BASE_URL + queryStr.trim(), new GeoLookupHandler());
+			checkProxy(sfp);
 			// TODO: Get proxy setting from properties file as well for custom deploy options.
 			// sfp.setProxyData("proxySvr:port","uid","password");
 			results = (List<Location>) sfp.parse();
@@ -104,7 +110,7 @@ public class WUService
 		if (queryStr != null && queryStr.trim().length() > 0)
 		{
 			DragonflySaxParser sfp = new DragonflySaxParser(FORECAST_BASE_Url + queryStr.trim(), new ForcastHandler());
-
+			checkProxy(sfp);
 			results = (List<Forecast>) sfp.parse();
 		}
 		return results;
@@ -137,6 +143,7 @@ public class WUService
 		if (queryStr != null && queryStr.trim().length() > 0)
 		{
 			DragonflySaxParser sfp = new DragonflySaxParser(ALERT_BASE_URL + queryStr.trim(), new AlertHandler());
+			checkProxy(sfp);
 			results = (List<Alert>) sfp.parse();
 		}
 		return results;
@@ -183,11 +190,37 @@ public class WUService
 			//if cant tell then treat as regular.
 			
 			DragonflySaxParser sfp = new DragonflySaxParser(feedUrl, new CurrentObservationHandler());
+			checkProxy(sfp);
 			results = (List<WeatherObservation>) sfp.parse();
 		}
 		return results;
 	}
 	
+	/**
+	 * Checks to see if a proxy is used and sets if needed.
+	 * @param sfp
+	 */
+	private void checkProxy(DragonflySaxParser sfp)
+	{
+		if(this.proxyServer != null)
+		{
+			sfp.setProxyData(this.proxyServer,this.proxyUser,this.proxyPassword);
+		}
+	}
+
+	/**
+	 * Sets values to use if proxy is needed for HTTP calls.
+	 * @param server
+	 * @param user
+	 * @param password
+	 */
+	public void setProxyData(String server, String user, String password)
+	{
+		this.proxyServer = server;
+		this.proxyUser = user;
+		this.proxyPassword = password;
+	}
+
 	/**
 	 * Converts the Current Conditions results in JSON format.
 	 * @param queryStr
