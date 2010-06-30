@@ -1,7 +1,6 @@
 package org.dragonfly.weatherwave;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
@@ -38,13 +37,19 @@ public class WeatherWaveRobot extends AbstractRobot
 
 	public void init() throws javax.servlet.ServletException 
 	{
-		WeatherWaveContext.templatePath = getServletContext().getContextPath();
-		logger.warning("****templatePAth = "+WeatherWaveContext.templatePath);
-		logger.warning("****WW_PROPS = "+getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
+		WeatherWaveContext.setAppEnvironment(getServletContext());
+		logger.warning("CURR_ENV=" + WeatherWaveContext.CURR_ENV);
 		
+//		WeatherWaveContext.templatePath = getServletContext().getContextPath();
+//		logger.warning("****templatePAth = "+WeatherWaveContext.templatePath);
+		logger.warning("****WW_PROPS = "+getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
+		WeatherWaveContext.loadProperties(getServletContext());
 		File rootProp = new File(getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
 		File rootLoc;
 		rootLoc = rootProp.getParentFile();
+		WeatherWaveContext.templatePath = rootLoc.getAbsolutePath();
+		logger.warning("TemplatePath ==" + WeatherWaveContext.templatePath);
+		logger.warning("props values ==" + WeatherWaveContext.props);
 		if(rootLoc.isDirectory())
 		{
 			StringBuilder sb = new StringBuilder();

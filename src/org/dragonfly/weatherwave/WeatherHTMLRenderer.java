@@ -101,7 +101,10 @@ public class WeatherHTMLRenderer
 			throw new NullPointerException("WeatherObservation obejct is null");
 		try
 		{
-			StringTemplateGroup templateGroup = new StringTemplateGroup("WeatherObs", "templates");
+			//TODO: add to properties file to have 2 or 3 settings for st path.
+			String templatePath = WeatherWaveContext.props.getProperty("string-template.path");
+			logger.warning("TemplatePath =="+WeatherWaveContext.getStringTempPath()+templatePath);//"/templates");
+			StringTemplateGroup templateGroup = new StringTemplateGroup("WeatherObs", WeatherWaveContext.getStringTempPath()+templatePath);
 
 			StringTemplate obsDisplay = templateGroup.getInstanceOf("ObsDisplay");
 			obsDisplay.setAttribute("observation_time", verifyString(obs.getObservation_time()));
@@ -123,9 +126,11 @@ public class WeatherHTMLRenderer
 			obsDisplay.setAttribute("visibility_mi", verifyString(obs.getVisibility_mi()));
 			obsDisplay.setAttribute("visibility_km", verifyString(obs.getVisibility_km()));
 
+			logger.warning("TEMPATEL RESULT == "+obs.toString());
 			return obsDisplay.toString();
 		} catch (Exception e)
 		{
+			//TODO: Clean up
 			StringBuilder sb = new StringBuilder();
 			File root = new File(".");
 			sb.append("absPath=").append(root.getAbsolutePath());
