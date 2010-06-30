@@ -1,9 +1,14 @@
 package org.dragonfly.weatherwave;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 import org.dragonfly.wunderground.service.WUService;
 
@@ -16,6 +21,8 @@ import com.google.wave.api.event.WaveletSelfAddedEvent;
 @SuppressWarnings("serial")
 public class WeatherWaveRobot extends AbstractRobot
 {
+	private static final Logger logger = Logger.getLogger(WeatherWaveRobot.class.getName());
+	
 	private static final String ERROR_MSG = "Oops something has gone terribly wrong! OK not really but, you might have found a bug or " +
 						"the weather service is on the fritz. If the problem persists add |debug to the end of your WW " +
 						"query like this:  [query|command|debug] (WW code omitted intentionally) and send me the junk in " +
@@ -29,6 +36,32 @@ public class WeatherWaveRobot extends AbstractRobot
 	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]";
 	// regex: @WW\[.....*\]
 
+	public void init() throws javax.servlet.ServletException 
+	{
+		WeatherWaveContext.templatePath = getServletContext().getContextPath();
+		logger.warning("****templatePAth = "+WeatherWaveContext.templatePath);
+		logger.warning("****WW_PROPS = "+getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
+		
+		File rootProp = new File(getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
+		File rootLoc;
+		rootLoc = rootProp.getParentFile();
+		if(rootLoc.isDirectory())
+		{
+			StringBuilder sb = new StringBuilder();
+			String[] flieList = rootLoc.list();
+			for (String fname : flieList)
+			{
+				sb.append("/n").append(fname);
+			}
+			logger.warning(sb.toString());
+		}
+		else
+		{
+			logger.warning("rootLoc not a dir: "+ rootLoc);
+		}
+		
+	}
+	
 	@Override
 	protected String getRobotName()
 	{
@@ -84,26 +117,25 @@ public class WeatherWaveRobot extends AbstractRobot
 
 			while (m.find())
 			{
+				logger.info("Found Match");
 				String query = text.substring(m.start() + 4, m.end() - 1);
 				debug.append("\nWW_query= ").append(query);
-				String rtn = "";
+
+				//				List<DragonflyDomain> rtn = new ArrayList<DragonflyDomain>();
 				if (query.contains("|"))
 				{
 					//check for debug
 					debugBlip = query.contains(DEBUG);
-					rtn = callWWCommand(query);
+					//rtn = callWWCommand(query);
 				} else
 				{
-					rtn = new WUService().getCurrentConditionsJSON(query);
-				}
-				
-				if(rtn != null)
-				{
-					//TODO: Try replacing the current text tag with a Title and inser an inline Blip aafter it?
-					Blip weatherBlip = blip.insertInlineBlip(m.start());
-					weatherBlip.appendMarkup("<b>Rendered Weather Marup goes here!</b>");
-					BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n" + rtn);
-					
+					List<WeatherObservation> rtn = new WUService().getCurrentConditions(query);
+					if(rtn != null)
+					{
+						Blip weatherBlip = blip.insertInlineBlip(m.start());
+						weatherBlip.appendMarkup(WeatherHTMLRenderer.renderCurrentConditions(rtn.get(0)));
+						BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n" + rtn);
+					}
 				}
 				
 				i++;

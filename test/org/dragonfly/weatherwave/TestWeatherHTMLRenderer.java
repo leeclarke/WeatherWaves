@@ -1,5 +1,10 @@
 package org.dragonfly.weatherwave;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -10,7 +15,25 @@ import org.dragonfly.wunderground.service.WUService;
 
 public class TestWeatherHTMLRenderer extends TestCase
 {
-	
+	public void testFilePathProblem() throws IOException
+	{
+		try
+		{
+			
+			File root = new File(".");
+			System.out.println("exists="+root.exists());
+			System.out.println("absPath:  "+root.getAbsolutePath());
+			System.out.println("absPath:  "+root.getPath());
+			File loc = new File("templates/ObsDisplay.st");
+			System.out.println("exists="+loc.exists());
+			InputStream fin = new FileInputStream("src/templates/ObsDisplay.st");
+			
+		} catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			System.out.println(e);
+		}
+	}
 	public void testRenderHTMLListOfDragonflyDomain() throws DragonflySaxException
 	{
 		WUService wuServ = new WUService();

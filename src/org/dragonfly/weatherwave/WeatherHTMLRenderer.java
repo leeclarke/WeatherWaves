@@ -1,9 +1,12 @@
 package org.dragonfly.weatherwave;
 
+import java.io.File;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+
 import org.dragonfly.wunderground.domain.Alert;
 import org.dragonfly.wunderground.domain.DragonflyDomain;
 import org.dragonfly.wunderground.domain.Forecast;
@@ -11,107 +14,140 @@ import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 
 /**
- * Responsible for rendering the Weather objects in a lovely HTML format. (Basically this is my view which sadly is put
- * together like a 2001 Servlet. fun!)
+ * Responsible for rendering the Weather objects in a lovely HTML format.
+ * (Basically this is my view which sadly is put together like a 2001 Servlet.
+ * fun!)
  * 
  * @author leeclarke
  */
 public class WeatherHTMLRenderer
 {
-	//TODO: Create keyword Map for Weather Condition --> Image icon 
+	private static final Logger logger = Logger.getLogger(WeatherHTMLRenderer.class.getName());
+	// TODO: Create keyword Map for Weather Condition --> Image icon
 	/**
 	 * Renders a predefined HTML format for a given DragonflyDomain Collection.
+	 * 
 	 * @param rootList
 	 * @return
 	 */
 	public static String renderHTML(List<? extends DragonflyDomain> rootList)
 	{
 		StringBuilder sb = new StringBuilder();
-		if(rootList != null && rootList.size()>0)
+		if (rootList != null && rootList.size() > 0)
 		{
 			DragonflyDomain tmp = rootList.get(0);
-			if(tmp instanceof WeatherObservation)
+			if (tmp instanceof WeatherObservation)
 			{
 				for (DragonflyDomain dragonflyDomain : rootList)
 				{
-					sb.append(renderCurrentConditions((WeatherObservation)dragonflyDomain));
+					sb.append(renderCurrentConditions((WeatherObservation) dragonflyDomain));
+				}
+			} else if (tmp instanceof Forecast)
+			{
+				for (DragonflyDomain dragonflyDomain : rootList)
+				{
+					sb.append(renderForecast((Forecast) dragonflyDomain));
 				}
 			}
-			else if(tmp instanceof Forecast)
+			if (tmp instanceof Alert)
 			{
 				for (DragonflyDomain dragonflyDomain : rootList)
 				{
-					sb.append(renderForecast((Forecast)dragonflyDomain));
+					sb.append(renderAlerts((Alert) dragonflyDomain));
 				}
-			}
-			if(tmp instanceof Alert)
+			} else if (tmp instanceof Location)
 			{
 				for (DragonflyDomain dragonflyDomain : rootList)
 				{
-					sb.append(renderAlerts((Alert)dragonflyDomain));
-				}
-			}
-			else if(tmp instanceof Location)
-			{
-				for (DragonflyDomain dragonflyDomain : rootList)
-				{
-					sb.append(renderLocations((Location)dragonflyDomain));
+					sb.append(renderLocations((Location) dragonflyDomain));
 				}
 			}
 		}
-		
+
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Renders a predefined HTML format for a given DragonflyDomain Object.
+	 * 
 	 * @param rootObject
 	 * @return
 	 */
 	public static String renderHTML(DragonflyDomain rootObject)
 	{
 		StringBuilder sb = new StringBuilder();
-		if(rootObject != null)
+		if (rootObject != null)
 		{
-			if(rootObject instanceof WeatherObservation)
-					sb.append(renderCurrentConditions((WeatherObservation)rootObject));
-			else if(rootObject instanceof Forecast)
-					sb.append(renderForecast((Forecast)rootObject));
-			else if(rootObject instanceof Alert)
-					sb.append(renderAlerts((Alert)rootObject));
-			else if(rootObject instanceof Location)
-					sb.append(renderLocations((Location)rootObject));
+			if (rootObject instanceof WeatherObservation)
+				sb.append(renderCurrentConditions((WeatherObservation) rootObject));
+			else if (rootObject instanceof Forecast)
+				sb.append(renderForecast((Forecast) rootObject));
+			else if (rootObject instanceof Alert)
+				sb.append(renderAlerts((Alert) rootObject));
+			else if (rootObject instanceof Location)
+				sb.append(renderLocations((Location) rootObject));
 		}
-		
+
 		return sb.toString();
 	}
-	
+
+	/**
+	 * @param obs
+	 * @return
+	 */
 	protected static String renderCurrentConditions(WeatherObservation obs)
 	{
-		if(obs == null)
+		if (obs == null)
 			throw new NullPointerException("WeatherObservation obejct is null");
-		StringTemplateGroup templateGroup = new StringTemplateGroup("WeatherObs", "templates");
-		StringTemplate obsDisplay = templateGroup.getInstanceOf("ObsDisplay"); 
-		obsDisplay.setAttribute("observation_time", obs.getObservation_time());
-		if(obs.getDisplay_location() != null)
+		try
 		{
-			obsDisplay.setAttribute("display_location_city", obs.getDisplay_location().getCity());
-			obsDisplay.setAttribute("display_location_state", obs.getDisplay_location().getState());
-			obsDisplay.setAttribute("display_location_zip", obs.getDisplay_location().getZip());
+			StringTemplateGroup templateGroup = new StringTemplateGroup("WeatherObs", "templates");
+
+			StringTemplate obsDisplay = templateGroup.getInstanceOf("ObsDisplay");
+			obsDisplay.setAttribute("observation_time", verifyString(obs.getObservation_time()));
+			if (obs.getDisplay_location() != null)
+			{
+				obsDisplay.setAttribute("display_location_city", verifyString(obs.getDisplay_location().getCity()));
+				obsDisplay.setAttribute("display_location_state", verifyString(obs.getDisplay_location().getState()));
+				obsDisplay.setAttribute("display_location_zip", verifyString(obs.getDisplay_location().getZip()));
+			}
+			obsDisplay.setAttribute("temp_f", verifyString(obs.getTemp_f()));
+			obsDisplay.setAttribute("temp_c", verifyString(obs.getTemp_c()));
+			obsDisplay.setAttribute("relative_humidity", verifyString(obs.getRelative_humidity()));
+			obsDisplay.setAttribute("wind_string", verifyString(obs.getWind_string()));
+			obsDisplay.setAttribute("pressure_string", verifyString(obs.getPressure_string()));
+			obsDisplay.setAttribute("dewpoint_string", verifyString(obs.getDewpoint_string()));
+			obsDisplay.setAttribute("heat_index_string", verifyString(obs.getHeat_index_string()));
+			obsDisplay.setAttribute("windchill_f", verifyString(obs.getWindchill_f()));
+			obsDisplay.setAttribute("windchill_c", verifyString(obs.getWindchill_c()));
+			obsDisplay.setAttribute("visibility_mi", verifyString(obs.getVisibility_mi()));
+			obsDisplay.setAttribute("visibility_km", verifyString(obs.getVisibility_km()));
+
+			return obsDisplay.toString();
+		} catch (Exception e)
+		{
+			StringBuilder sb = new StringBuilder();
+			File root = new File(".");
+			sb.append("absPath=").append(root.getAbsolutePath());
+			sb.append("Path=").append(root.getPath());
+			File loc = new File("templates/ObsDisplay.st");
+			sb.append("expected name:").append(loc.exists());
+			sb.append("Failed 2 build template  ");
+			logger.warning(sb.toString()+e);
+			return "There was an error generating the response.";
 		}
-		
-		return obsDisplay.toString();
+
 	}
-	
+
 	protected static String renderLocations(Location loc)
 	{
 		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
-		if(loc != null)
+		if (loc != null)
 		{
-			
+
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -119,11 +155,11 @@ public class WeatherHTMLRenderer
 	{
 		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
-		if(alert != null)
+		if (alert != null)
 		{
-			
+
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -131,12 +167,16 @@ public class WeatherHTMLRenderer
 	{
 		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
-		if(forecast != null)
+		if (forecast != null)
 		{
-			
+
 		}
-		
+
 		return sb.toString();
 	}
-}
 
+	protected static String verifyString(String value)
+	{
+		return value == null ? "" : value;
+	}
+}
