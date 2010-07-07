@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dragonfly.wunderground.domain.ObservationLocation;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 import org.dragonfly.wunderground.service.WUService;
@@ -138,8 +139,65 @@ public class WeatherWaveRobot extends AbstractRobot
 					if(rtn != null)
 					{
 						Blip weatherBlip = blip.insertInlineBlip(m.start());
-						weatherBlip.appendMarkup(WeatherHTMLRenderer.renderCurrentConditions(rtn.get(0)));
-						BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n" + rtn);
+						BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n ");
+						
+						WeatherObservation obs = rtn.get(0);
+//						weatherBlip.appendMarkup("<div bgcolor=#3399ff>div test here</div>");
+						StringBuilder sb = new StringBuilder("\n\n\n");
+						ObservationLocation loc = obs.getDisplay_location();
+						sb.append("Current conditions at ").append(loc.getCity()).append(", ").append(loc.getZip()).append(" ");
+						int titleLen = sb.length();
+						BlipContentRefs head = weatherBlip.append(sb.toString());
+						
+						
+						sb = new StringBuilder("\nTemprature:");
+						sb.append(obs.temp_f).append(" F ( ").append(obs.temp_c).append(" C )");
+						
+						BlipContentRefs temp = weatherBlip.append(sb.toString());
+						//temp.annotate("style/fontWeight", "none");
+						temp.annotate("style/backgroundColor", "#FFFF99");
+						//Humidity
+						sb = new StringBuilder("\nHumidity:");
+						sb.append(obs.getRelative_humidity());
+						weatherBlip.append(sb.toString());
+						
+						//Wind
+						sb = new StringBuilder("\nWind:");
+						sb.append(obs.getWind_string());
+						weatherBlip.append(sb.toString());
+						
+						//Pressure
+						sb = new StringBuilder("\nBarometric Pressure:");
+						sb.append(obs.getPressure_string());
+						weatherBlip.append(sb.toString());
+						
+						//Dewpoint
+						sb = new StringBuilder("\nDewPoint:");
+						sb.append(obs.getDewpoint_string());
+						weatherBlip.append(sb.toString());
+						
+						//Heat Index
+						sb = new StringBuilder("\nHeat Index:");
+						sb.append(obs.getHeat_index_string());
+						weatherBlip.append(sb.toString());
+						
+						//Wind Chill
+						sb = new StringBuilder("\nWind Chill:");
+						sb.append(obs.getWindchill_string());
+						weatherBlip.append(sb.toString());
+						
+						//Visibility
+						sb = new StringBuilder("\nVisibility:");
+						sb.append(obs.getVisibility_mi()).append("mi (");
+						sb.append(obs.getVisibility_km()).append(" km)");
+						weatherBlip.append(sb.toString());
+						
+						BlipContentRefs title = weatherBlip.range(0, titleLen);
+						title.annotate("style/fontWeight", "bold");
+						title.annotate("style/backgroundColor", "#3399FF");
+						
+//						weatherBlip.appendMarkup(WeatherHTMLRenderer.renderCurrentConditions(rtn.get(0)));
+						logger.info("FINISHED processin query");
 					}
 				}
 				
@@ -154,7 +212,7 @@ public class WeatherWaveRobot extends AbstractRobot
 		debug.append("    Weatherwaves has tried to update.");
 		if(debugBlip)
 		{
-			event.getWavelet().reply(debug.toString());
+			event.getWavelet().reply("DEBUG\n"+debug.toString());
 		}
 	}
 
