@@ -9,6 +9,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.dragonfly.weatherwave.view.WeatherHTMLRenderer;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 import org.dragonfly.wunderground.service.WUService;
