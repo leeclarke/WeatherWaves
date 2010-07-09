@@ -1,4 +1,5 @@
 package org.dragonfly.weatherwave;
+//TODO: Failing to query for cities/state name. Returns that there is an error with service.
 
 import java.io.File;
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.regex.Pattern;
 
 import org.dragonfly.weatherwave.exception.WWViewException;
 import org.dragonfly.weatherwave.view.WeatherBlipRenderer;
-import org.dragonfly.wunderground.domain.ObservationLocation;
+import org.dragonfly.wunderground.domain.Alert;
+import org.dragonfly.wunderground.domain.Forecast;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 import org.dragonfly.wunderground.service.WUService;
@@ -23,37 +25,39 @@ import com.google.wave.api.event.WaveletSelfAddedEvent;
 @SuppressWarnings("serial")
 public class WeatherWaveRobot extends AbstractRobot
 {
+	private static final String MSG_SERVICE_DOWN = "Looks like the weather service is not responding, sorry about this. Try again in a bit and see if the service is back up.";
+
 	private static final Logger logger = Logger.getLogger(WeatherWaveRobot.class.getName());
-	
-	private static final String ERROR_MSG = "Oops something has gone terribly wrong! OK not really but, you might have found a bug or " +
-						"the weather service is on the fritz. If the problem persists add |debug to the end of your WW " +
-						"query like this:  [query|command|debug] (WW code omitted intentionally) and send me the junk in " +
-						"the debug blip and I'll have our vast army of code monkeys puzzle it over (and fix it if they want " +
-						"any more bananas and Mtn. Dew!)";
+
+	private static final String ERROR_MSG = "Oops something has gone terribly wrong! OK not really but, you might have found a bug or "
+			+ "the weather service is on the fritz. If the problem persists add |debug to the end of your WW "
+			+ "query like this:  [query|command|debug] (WW code omitted intentionally) and send me the junk in "
+			+ "the debug blip and I'll have our vast army of code monkeys puzzle it over (and fix it if they want "
+			+ "any more bananas and Mtn. Dew!)";
 	private static final String DEBUG = "debug";
 	private static final String BOT_HELP_URL = "http://weatherwaves.appsopt.com";
 	private static final String INITIAL_CONTENT_MSG = "\nYou have added WeatherWaves to your wave. Insert current local weather information from the wundergound.com \nFor instructions on use check out our help page."
-									+ BOT_HELP_URL + " to getinstructions";
-	// TODO: Ensure only one match at a time. Currently it could match multiples at once.
+			+ BOT_HELP_URL + " to getinstructions";
+	// TODO: Ensure only one match at a time. Currently it could match multiples
+	// at once.
 	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]";
+
 	// regex: @WW\[.....*\]
 
-	public void init() throws javax.servlet.ServletException 
+	public void init() throws javax.servlet.ServletException
 	{
 		WeatherWaveContext.setAppEnvironment(getServletContext());
-		logger.warning("CURR_ENV=" + WeatherWaveContext.CURR_ENV);
-		
-//		WeatherWaveContext.templatePath = getServletContext().getContextPath();
-//		logger.warning("****templatePAth = "+WeatherWaveContext.templatePath);
-		logger.warning("****WW_PROPS = "+getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
+		logger.info("CURR_ENV=" + WeatherWaveContext.CURR_ENV);
+
+		logger.info("****WW_PROPS = " + getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
 		WeatherWaveContext.loadProperties(getServletContext());
 		File rootProp = new File(getServletContext().getRealPath(WeatherWaveContext.PROP_FILE_NAME));
 		File rootLoc;
 		rootLoc = rootProp.getParentFile();
 		WeatherWaveContext.templatePath = rootLoc.getAbsolutePath();
-		logger.warning("TemplatePath ==" + WeatherWaveContext.templatePath);
-		logger.warning("props values ==" + WeatherWaveContext.props);
-		if(rootLoc.isDirectory())
+		logger.info("TemplatePath ==" + WeatherWaveContext.templatePath);
+		logger.info("props values ==" + WeatherWaveContext.props);
+		if (rootLoc.isDirectory())
 		{
 			StringBuilder sb = new StringBuilder();
 			String[] flieList = rootLoc.list();
@@ -61,15 +65,14 @@ public class WeatherWaveRobot extends AbstractRobot
 			{
 				sb.append("/n").append(fname);
 			}
-			logger.warning(sb.toString());
-		}
-		else
+			logger.info(sb.toString());
+		} else
 		{
-			logger.warning("rootLoc not a dir: "+ rootLoc);
+			logger.warning("rootLoc not a dir: " + rootLoc);
 		}
-		
+
 	}
-	
+
 	@Override
 	protected String getRobotName()
 	{
@@ -96,16 +99,17 @@ public class WeatherWaveRobot extends AbstractRobot
 
 	/**
 	 * Event fires on Doc Changed event if the filter, @WW[query] or
-	 * @WW[query:serviceName] is present. Valid queries should be a zip code, a
-	 * city and state or even an airport name prefixed with a 'K' ie 'KTPA'.
-	 * This is the default behavior which returns the current weather
-	 * observation.
 	 * 
-	 * Additional serviceNames: 
-	 * <li>
-	 * 		<ul> alert | a 
-	 * 		<ul> forecast | f 
-	 * </li> 
+	 * @WW[query:serviceName] is present. Valid queries should be a zip code, a
+	 *                        city and state or even an airport name prefixed
+	 *                        with a 'K' ie 'KTPA'. This is the default behavior
+	 *                        which returns the current weather observation.
+	 * 
+	 *                        Additional serviceNames: <li>
+	 *                        <ul>
+	 *                        alert | a
+	 *                        <ul>
+	 *                        forecast | f</li>
 	 * @see com.google.wave.api.AbstractRobot#onDocumentChanged(com.google.wave.api.event.DocumentChangedEvent)
 	 */
 	@Capability(filter = WW_REG_PATTERN)
@@ -128,76 +132,117 @@ public class WeatherWaveRobot extends AbstractRobot
 				logger.info("Found Match");
 				String query = text.substring(m.start() + 4, m.end() - 1);
 				debug.append("\nWW_query= ").append(query);
-
-				//				List<DragonflyDomain> rtn = new ArrayList<DragonflyDomain>();
+				BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n ");
+				int insertPos = m.start();
 				if (query.contains("|"))
 				{
-					//check for debug
+					// check for debug
 					debugBlip = query.contains(DEBUG);
-					//rtn = callWWCommand(query);
+					callWWCommand(query, blip, debug, insertPos);
+
 				} else
 				{
 					List<WeatherObservation> rtn = new WUService().getCurrentConditions(query);
-					if(rtn != null)
+					if (rtn != null)
 					{
-						
-						Blip weatherBlip = blip.insertInlineBlip(m.start());
-						BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n ");
-						
+						Blip weatherBlip = blip.insertInlineBlip(insertPos);
+
 						WeatherObservation obs = rtn.get(0);
-						try{
+						try
+						{
 							WeatherBlipRenderer.renderCurrentConditions(obs, weatherBlip);
-						}
-						catch (WWViewException e) {
+						} catch (WWViewException e)
+						{
 							weatherBlip.append("\nNo results were returned for the search query: " + query);
 						}
-						
+
 						logger.info("FINISHED processin query");
 					}
 				}
-				
+
 				i++;
 			}
 			debug.append("pattern ct match=").append(i);
+		} catch (DragonflySaxException de)
+		{
+			blip.append(MSG_SERVICE_DOWN);
 		} catch (Exception e)
 		{
 			debug.append("Captain we have a problem!" + e);
 			blip.append(ERROR_MSG);
 		}
 		debug.append("    Weatherwaves has tried to update.");
-		if(debugBlip)
+		if (debugBlip)
 		{
-			event.getWavelet().reply("DEBUG\n"+debug.toString());
+			event.getWavelet().reply("DEBUG\n" + debug.toString());
 		}
 	}
 
 	/**
-	 * Simply attempts to take the command search request and add it to 
-	 * @param - query string formatted as query|command  (DEBUG key is stripped out here.)
+	 * Simply attempts to take the command search request and add it to
+	 * 
+	 * @param debug
+	 * @param blip
+	 * @param insertPos 
+	 * @param - query string formatted as query|command (DEBUG key is stripped
+	 *        out here.)
 	 * @return - query results
-	 * @throws DragonflySaxException 
+	 * @throws DragonflySaxException
 	 */
-	private String callWWCommand(String query) throws DragonflySaxException
+	private void callWWCommand(String query, Blip blip, StringBuilder debug, int insertPos) throws DragonflySaxException
 	{
-		String rtn = null;
-		//remove debug keyword
-		query = query.contains(DEBUG)? query.substring(0,query.indexOf(DEBUG)-1):query;
-		StringTokenizer st = new StringTokenizer(query,"|");
-		if(st.countTokens() == 1)
-			rtn =  new WUService().getCurrentConditionsJSON(query);
+		// remove debug keyword
+		query = query.contains(DEBUG) ? query.substring(0, query.indexOf(DEBUG) - 1) : query;
+		StringTokenizer st = new StringTokenizer(query, "|");
+
+		if (st.countTokens() == 1)
+		{
+			List<WeatherObservation> rtn = new WUService().getCurrentConditions(query);
+			Blip weatherBlip = blip.insertInlineBlip(insertPos);
+
+			WeatherObservation obs = rtn.get(0);
+			try
+			{
+				WeatherBlipRenderer.renderCurrentConditions(obs, weatherBlip);
+			} catch (WWViewException e)
+			{
+				weatherBlip.append("\nNo results were returned for the search query: " + query);
+			}
+		}
 		else
 		{
 			String q = st.nextToken();
 			String cmd = st.nextToken();
-			if(cmd.equalsIgnoreCase("F")||cmd.equalsIgnoreCase("forecast"))
+			try
 			{
-				rtn =  new WUService().getForcastJSON(q);
+
+				if (cmd.equalsIgnoreCase("F") || cmd.equalsIgnoreCase("forecast"))
+				{
+					List<Forecast> forecast = new WUService().getForecast(q);
+					
+					WeatherBlipRenderer.renderForecast(forecast, blip.insertInlineBlip(insertPos));
+					
+				} else if (cmd.equalsIgnoreCase("A") || cmd.equalsIgnoreCase("Alert"))
+				{
+					List<Alert> alerts = new WUService().getAlerts(q);
+					if(alerts.size()<1)
+					{
+						Blip wwBlip = blip.insertInlineBlip(insertPos);
+						wwBlip.append("\nWeatherWave returns no alerts, all is fine!").annotate("style/fontWeight", "bold");
+					}
+					else
+						WeatherBlipRenderer.renderAlerts(alerts, blip.insertInlineBlip(insertPos),q);
+				}
+			} 
+			catch (DragonflySaxException de) {
+				blip.append(MSG_SERVICE_DOWN);
 			}
-			else if(cmd.equalsIgnoreCase("A")||cmd.equalsIgnoreCase("Alert"))
+			catch (Exception e)
 			{
-				rtn =  new WUService().getAlertsJSON(q);
+				debug.append("Captain we have a problem!" + e);
+				blip.append(ERROR_MSG);
 			}
 		}
-		return rtn;
 	}
+
 }

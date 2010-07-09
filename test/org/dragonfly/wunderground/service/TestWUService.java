@@ -3,6 +3,7 @@ package org.dragonfly.wunderground.service;
 import java.util.List;
 
 import org.dragonfly.wunderground.domain.Location;
+import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 import org.dragonfly.wunderground.service.WUService;
 
@@ -40,9 +41,13 @@ public class TestWUService extends TestCase
 		fail("Not yet implemented");
 	}
 
-	public void testGetCurrentConditions()
+	public void testGetCurrentConditions() throws DragonflySaxException
 	{
-		fail("Not yet implemented");
+		String zip = "33602";
+		WUService wuService = new WUService();
+		List<WeatherObservation> rtn = wuService.getCurrentConditions(zip);
+		assertTrue("Valid Search should return results!", rtn.size()>0);
+		
 	}
 
 }

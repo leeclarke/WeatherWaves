@@ -1,6 +1,10 @@
 package org.dragonfly.weatherwave.view;
 
+import java.util.List;
+
 import org.dragonfly.weatherwave.exception.WWViewException;
+import org.dragonfly.wunderground.domain.Alert;
+import org.dragonfly.wunderground.domain.Forecast;
 import org.dragonfly.wunderground.domain.ObservationLocation;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 
@@ -83,7 +87,6 @@ public class WeatherBlipRenderer
 			
 			String wugr = "WeatherUnderground";
 			sb = new StringBuilder("\nProvided by ");
-			int preLen = sb.length();
 			sb.append(wugr);
 			weatherBlip.append(sb.toString());
 			
@@ -95,4 +98,60 @@ public class WeatherBlipRenderer
 			throw new WWViewException("No weather results were returned.");
 	}
 
+	/**
+	 * @param alerts
+	 * @param weatherBlip
+	 * @throws WWViewException
+	 */
+	public static void renderAlerts(List<Alert> alerts, Blip weatherBlip, String query) throws WWViewException
+	{
+		String title = "\n\n\nWeather Alerts for " + query;
+		weatherBlip.append(title);
+		for (Alert alert : alerts)
+		{
+			StringBuilder sb = new StringBuilder("\n");
+			sb.append(alert.getDescription());
+			weatherBlip.append(sb.toString()).annotate("style/backgroundColor", "#FFFF99").annotate("style/fontWeight", "none");
+			
+			sb = new StringBuilder("\n");
+			sb.append("Date: ").append(alert.getDate());
+			weatherBlip.append(sb.toString());
+			
+			sb = new StringBuilder("\n");
+			sb.append("Expires: ").append(alert.getExpires());
+			weatherBlip.append(sb.toString());
+			
+			sb = new StringBuilder("\nMessage:\n");
+			sb.append(alert.getMessage());
+			weatherBlip.append(sb.toString());
+			
+			String wugr = "WeatherUnderground";
+			sb = new StringBuilder("\nProvided by ");
+			sb.append(wugr);
+			weatherBlip.append(sb.toString());
+			
+			//Annotate link
+			BlipContentRefs link = weatherBlip.range(weatherBlip.length()-wugr.length(), weatherBlip.length());
+			link.annotate("link/manual", "http://www/wunderground.com");
+			
+			weatherBlip.all(alert.getDescription()).annotate("style/fontWeight", "bold").annotate("style/color", "red");
+		}
+		
+		//Annotate the Title
+		weatherBlip.range(0, title.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
+		
+	}
+
+	/**
+	 * @param forecast
+	 * @param insertInlineBlip
+	 * @throws WWViewException
+	 */
+	public static void renderForecast(List<Forecast> forecast, Blip insertInlineBlip)  throws WWViewException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
+
