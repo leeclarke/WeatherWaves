@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 
 /**
+ * Provide a server context as well as configuration from properties file.
  * @author leeclarke
- *
  */
 public class WeatherWaveContext
 {

@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.dragonfly.weatherwave.WeatherWaveRobot;
 import org.dragonfly.wunderground.domain.Alert;
 import org.dragonfly.wunderground.domain.Forecast;
 import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 
-import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 import com.google.gson.Gson;
 
 /**
@@ -56,9 +54,6 @@ public class WUService
 	public List<String> getGeoLocationPickList(String queryStr) throws DragonflySaxException
 	{
 		List<Location> locations = this.getGeoLocationData(queryStr);
-		// initially will call the same handler etc as the full method call but may be refined if the performance is an
-		// issue.
-		// TODO: do some manipulation to produce a reduced data object and output to desired format.
 		// TODO: Might not really need this.
 		return null;
 	}
@@ -94,8 +89,6 @@ public class WUService
 		{
 			DragonflySaxParser sfp = new DragonflySaxParser(GEO_BASE_URL + queryStr.trim(), new GeoLookupHandler());
 			checkProxy(sfp);
-			// TODO: Get proxy setting from properties file as well for custom deploy options.
-			// sfp.setProxyData("proxySvr:port","uid","password");
 			results = (List<Location>) sfp.parse();
 		}
 		return results;

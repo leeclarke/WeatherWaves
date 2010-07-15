@@ -82,7 +82,7 @@ public class WeatherWaveServlet extends HttpServlet
 		else
 		{
 			//TODO: display a test page w query textbox, drop down with cmd options, and submit button.
-			resp.getWriter().println("WeatherWave Test Page. App Coming soon!  " );
+			resp.getWriter().println("WeatherWave Test Page. WebApp version Coming soon!  " );
 		}
 	}
 }

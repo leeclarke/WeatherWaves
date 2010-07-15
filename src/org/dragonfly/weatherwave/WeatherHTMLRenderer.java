@@ -116,21 +116,20 @@ public class WeatherHTMLRenderer
 			}
 			obsDisplay.setAttribute("temp_f", verifyString(obs.getTemp_f()));
 			obsDisplay.setAttribute("temp_c", verifyString(obs.getTemp_c()));
-//			obsDisplay.setAttribute("relative_humidity", verifyString(obs.getRelative_humidity()));
-//			obsDisplay.setAttribute("wind_string", verifyString(obs.getWind_string()));
-//			obsDisplay.setAttribute("pressure_string", verifyString(obs.getPressure_string()));
-//			obsDisplay.setAttribute("dewpoint_string", verifyString(obs.getDewpoint_string()));
-//			obsDisplay.setAttribute("heat_index_string", verifyString(obs.getHeat_index_string()));
-//			obsDisplay.setAttribute("windchill_f", verifyString(obs.getWindchill_f()));
-//			obsDisplay.setAttribute("windchill_c", verifyString(obs.getWindchill_c()));
-//			obsDisplay.setAttribute("visibility_mi", verifyString(obs.getVisibility_mi()));
+			obsDisplay.setAttribute("relative_humidity", verifyString(obs.getRelative_humidity()));
+			obsDisplay.setAttribute("wind_string", verifyString(obs.getWind_string()));
+			obsDisplay.setAttribute("pressure_string", verifyString(obs.getPressure_string()));
+			obsDisplay.setAttribute("dewpoint_string", verifyString(obs.getDewpoint_string()));
+			obsDisplay.setAttribute("heat_index_string", verifyString(obs.getHeat_index_string()));
+			obsDisplay.setAttribute("windchill_f", verifyString(obs.getWindchill_f()));
+			obsDisplay.setAttribute("windchill_c", verifyString(obs.getWindchill_c()));
+			obsDisplay.setAttribute("visibility_mi", verifyString(obs.getVisibility_mi()));
 			obsDisplay.setAttribute("visibility_km", verifyString(obs.getVisibility_km()));
 
 			logger.warning("TEMPATEL RESULT == "+obsDisplay.toString());
 			return obsDisplay.toString();
 		} catch (Exception e)
 		{
-			//TODO: Clean up
 			StringBuilder sb = new StringBuilder();
 			File root = new File(".");
 			sb.append("absPath=").append(root.getAbsolutePath());

@@ -1,6 +1,6 @@
 package org.dragonfly.weatherwave;
-//TODO: Failing to query for cities/state name. Returns that there is an error with service.
 //TODO: Need to  include the Weather image in output
+//TODO: Need Bot image
 
 import java.io.File;
 import java.util.List;
@@ -39,12 +39,12 @@ public class WeatherWaveRobot extends AbstractRobot
 	private static final String BOT_HELP_URL = "http://weatherwaves.appsopt.com";
 	private static final String INITIAL_CONTENT_MSG = "\nYou have added WeatherWaves to your wave. Insert current local weather information from the wundergound.com \nFor instructions on use check out our help page."
 			+ BOT_HELP_URL + " to getinstructions";
-	// TODO: Ensure only one match at a time. Currently it could match multiples
-	// at once.
-	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]";
+	
+	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]"; // regex: @WW\[.....*\]
 
-	// regex: @WW\[.....*\]
-
+	/* (non-Javadoc)
+	 * @see javax.servlet.GenericServlet#init()
+	 */
 	public void init() throws javax.servlet.ServletException
 	{
 		WeatherWaveContext.setAppEnvironment(getServletContext());
@@ -106,11 +106,10 @@ public class WeatherWaveRobot extends AbstractRobot
 	 *                        with a 'K' ie 'KTPA'. This is the default behavior
 	 *                        which returns the current weather observation.
 	 * 
-	 *                        Additional serviceNames: <li>
-	 *                        <ul>
-	 *                        alert | a
-	 *                        <ul>
-	 *                        forecast | f</li>
+	 * Additional serviceNames: <li>
+	 *                            <ul>alert | a
+	 *                            <ul>forecast | f
+	 *                         </li>
 	 * @see com.google.wave.api.AbstractRobot#onDocumentChanged(com.google.wave.api.event.DocumentChangedEvent)
 	 */
 	@Capability(filter = WW_REG_PATTERN)
@@ -145,7 +144,6 @@ public class WeatherWaveRobot extends AbstractRobot
 
 				} else
 				{
-//TODO: City Names with space ie(New York) dont work for some reason.. parsing issue?					
 					logger.info(">DEFAULT query = " + query);
 					List<WeatherObservation> rtn = new WUService().getCurrentConditions(query);
 					if (rtn != null)
