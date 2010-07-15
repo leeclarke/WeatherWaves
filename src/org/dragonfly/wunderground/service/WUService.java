@@ -2,13 +2,16 @@ package org.dragonfly.wunderground.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.dragonfly.weatherwave.WeatherWaveRobot;
 import org.dragonfly.wunderground.domain.Alert;
 import org.dragonfly.wunderground.domain.Forecast;
 import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 
+import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 import com.google.gson.Gson;
 
 /**
@@ -20,6 +23,8 @@ import com.google.gson.Gson;
  */
 public class WUService
 {
+	private static final Logger logger = Logger.getLogger(WUService.class.getName());
+	
 	// TODO: Extract to a properties file so that if this changes in the future it wont require a recompile to fix.
 	//TODO: Also include Proxy settings in the properties file!
 	public static final String GEO_BASE_URL = "http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=";
@@ -175,27 +180,24 @@ public class WUService
 	@SuppressWarnings("unchecked")
 	public List<WeatherObservation> getCurrentConditions(String queryStr) throws DragonflySaxException
 	{
+		logger.info("enter getCurrentConditions queryStr="+queryStr);
 		List<WeatherObservation> results = null;
 		if (queryStr != null && queryStr.trim().length() > 0)
 		{
+			logger.info("Query is good.");
 			String feedUrl = null;
-//			if(queryStr.length() >4)
-//			{
-//				feedUrl = PWS_BASE_URL;  //Not sure how to id PWS calls w/o directly calling them seperatly.
-//			}
-//			else
-				feedUrl = OBSERVATION_BASE_URL +queryStr;
-			
+
+			feedUrl = OBSERVATION_BASE_URL +queryStr;
 			//TODO: Determine if requesting a PWS station, what are rules? Looks like they all contain the word 'LOCAL'
 			//if cant tell then treat as regular.
-			
+			logger.info("feedUrl=" + feedUrl);
 			DragonflySaxParser sfp = new DragonflySaxParser(feedUrl, new CurrentObservationHandler());
 			checkProxy(sfp);
 			results = (List<WeatherObservation>) sfp.parse();
 		}
 		return results;
 	}
-	
+
 	/**
 	 * Checks to see if a proxy is used and sets if needed.
 	 * @param sfp

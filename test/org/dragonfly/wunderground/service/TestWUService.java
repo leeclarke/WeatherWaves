@@ -49,5 +49,14 @@ public class TestWUService extends TestCase
 		assertTrue("Valid Search should return results!", rtn.size()>0);
 		
 	}
+	
+	public void testGetCurrentConditions_CityState() throws DragonflySaxException
+	{
+		String zip = "New York, NY";
+		WUService wuService = new WUService();
+		List<WeatherObservation> rtn = wuService.getCurrentConditions(zip);
+		assertTrue("Valid Search should return results!", rtn.size()>0);
+		
+	}
 
 }

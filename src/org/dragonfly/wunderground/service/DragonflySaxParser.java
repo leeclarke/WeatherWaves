@@ -23,7 +23,7 @@ public class DragonflySaxParser extends BaseFeedParser
 	 */
 	protected DragonflySaxParser(String feedUrl, DragonflySaxHandler dHandler)
 	{
-		super(feedUrl);
+		super(formatUrl(feedUrl));
 		if(dHandler == null)
 			throw new NullPointerException();
 		this.handler = dHandler;
@@ -42,5 +42,16 @@ public class DragonflySaxParser extends BaseFeedParser
 		{
 			throw new DragonflySaxException(e); 
 		}
+	}
+	
+	
+	/**
+	 * Escapes the URL and does whatever formatting is required.
+	 * @param string
+	 * @return
+	 */
+	public static String formatUrl(String urlString)
+	{
+		return urlString.replace(" ", "%20");
 	}
 }

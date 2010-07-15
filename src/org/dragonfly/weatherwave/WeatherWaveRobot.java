@@ -1,5 +1,6 @@
 package org.dragonfly.weatherwave;
 //TODO: Failing to query for cities/state name. Returns that there is an error with service.
+//TODO: Need to  include the Weather image in output
 
 import java.io.File;
 import java.util.List;
@@ -132,16 +133,20 @@ public class WeatherWaveRobot extends AbstractRobot
 				logger.info("Found Match");
 				String query = text.substring(m.start() + 4, m.end() - 1);
 				debug.append("\nWW_query= ").append(query);
+				logger.info("WW_query= " +query);
 				BlipContentRefs rep = blip.all("@WW[" + query + "]").replace("\n ");
 				int insertPos = m.start();
 				if (query.contains("|"))
 				{
+					logger.info("IN debug or Extended cmd mode.");
 					// check for debug
 					debugBlip = query.contains(DEBUG);
 					callWWCommand(query, blip, debug, insertPos);
 
 				} else
 				{
+//TODO: City Names with space ie(New York) dont work for some reason.. parsing issue?					
+					logger.info(">DEFAULT query = " + query);
 					List<WeatherObservation> rtn = new WUService().getCurrentConditions(query);
 					if (rtn != null)
 					{
