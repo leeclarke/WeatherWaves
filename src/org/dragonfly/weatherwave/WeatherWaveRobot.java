@@ -1,6 +1,7 @@
 package org.dragonfly.weatherwave;
 //TODO: Need to  include the Weather image in output
 //TODO: Need Bot image
+//TODO: Finish Forecast Render
 
 import java.io.File;
 import java.util.List;
@@ -223,7 +224,7 @@ public class WeatherWaveRobot extends AbstractRobot
 				{
 					List<Forecast> forecast = new WUService().getForecast(q);
 					
-					WeatherBlipRenderer.renderForecast(forecast, blip.insertInlineBlip(insertPos));
+					WeatherBlipRenderer.renderForecast(forecast, blip.insertInlineBlip(insertPos),q);
 					
 				} else if (cmd.equalsIgnoreCase("A") || cmd.equalsIgnoreCase("Alert"))
 				{

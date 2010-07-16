@@ -6,7 +6,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.dragonfly.wunderground.domain.DragonflyDomain;
-import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
 
 /**
