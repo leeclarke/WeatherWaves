@@ -5,6 +5,22 @@ import org.dragonfly.wunderground.util.Exportable;
 public class MoonPhase extends DragonflyDomain
 {
 	public static final String root = "moon_phase";
+
+	enum MOON_PHASE { 
+		NA("n/a") ,WAXING_GIBBIOUS("Waxing Gibbous"), FIRST_QUARTER("First Quarter"), WAXING_CRESCENT("Waxing Crecent"), NEW("New"), WANING_CRESCENT("Waining Crecent") ,THIRD_QUARTER("Third Quarter"), WANING_GIBBOUS("Waining Gibbous"), FULL("Full");
+		
+		private String txtName = "";
+		
+		MOON_PHASE(String textName)
+		{
+			txtName = textName;
+		}
+		
+		public String getTxtName()
+		{
+			return txtName;
+		}
+	};
 	
 	@Exportable(xmlName="percentIlluminated")
 	private String percentIlluminated;
@@ -29,6 +45,60 @@ public class MoonPhase extends DragonflyDomain
 	
 	@Exportable(xmlName="sunrise_minute")
 	private String sunrise_minute;
+	
+	
+	/**
+	 * Returns a Strin title of the MoonPhase
+	 * @return
+	 */
+	public String getMoonPhaseName()
+	{
+		int moonInt;
+		try
+		{
+			moonInt = Integer.valueOf(ageOfMoon);
+		} catch (Exception e)
+		{
+			moonInt = 0;
+		}
+		return (MOON_PHASE.values()[moonInt]).getTxtName();
+	}
+	
+	/**
+	 * Convenience methods to get formatted info 
+	 * @return
+	 */
+	public String getMoonPhaseString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("Phase: ").append(getMoonPhaseName());
+		sb.append(" Percent Illuminated:").append(percentIlluminated);
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Convenience methods to get formatted info
+	 * @return
+	 */
+	public String getSunsetString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(sunset_hour).append(":").append(sunset_minute);
+		return sb.toString();
+	}
+	
+	/**
+	 * Convenience methods to get formatted info
+	 * @return
+	 */
+	public String getSunriseString()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(sunrise_hour).append(":").append(sunrise_minute);
+		return sb.toString();
+	}
+	
 	
 	
 	public String getPercentIlluminated()

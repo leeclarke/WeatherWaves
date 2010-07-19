@@ -43,6 +43,8 @@ public class WeatherWaveRobot extends AbstractRobot
 	
 	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]"; // regex: @WW\[.....*\]
 
+	private static final String BOT_AVATAR_URL = "http://weatherwaves.appsopt.com/img/Tray-Weather-Forecast.icon.gif";
+
 	/* (non-Javadoc)
 	 * @see javax.servlet.GenericServlet#init()
 	 */
@@ -90,9 +92,10 @@ public class WeatherWaveRobot extends AbstractRobot
 	@Override
 	protected String getRobotAvatarUrl()
 	{
-		return BOT_HELP_URL;
+		return BOT_AVATAR_URL;
 	}
 
+	
 	@Override
 	public void onWaveletSelfAdded(WaveletSelfAddedEvent event)
 	{

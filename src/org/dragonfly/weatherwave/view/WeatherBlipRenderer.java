@@ -154,18 +154,28 @@ public class WeatherBlipRenderer
 	 */
 	public static void renderForecast(List<Forecast> forecasts, Blip weatherBlip, String query)  throws WWViewException
 	{
-		//ODO: Finish
 		if(forecasts.size() > 0)
 		{
 			Forecast theForecast = forecasts.get(0);
-			String title = "Weather Forecast for " + query;
+			String title = "\n\nWeather Forecast for " + query;
 			weatherBlip.append(title);
+			
+			
 			weatherBlip.range(0, title.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
 			for (Forecast forecast : forecasts)
 			{
-				Blip forecastBlip = weatherBlip.insertInlineBlip(weatherBlip.length());
+				weatherBlip.append("\nDate: "+forecast.getDate());
+				weatherBlip.append("\nMoon Phase: "+forecast.getMoon_phase().getMoonPhaseString());
+				weatherBlip.append("\nSunrise: "+forecast.getMoon_phase().getSunriseString());
+				weatherBlip.append("\nSunset: "+forecast.getMoon_phase().getSunsetString());
 				List<ForecastDay> txtFc = forecast.getTxt_forecast();
-				
+				for (ForecastDay forecastDay : txtFc)
+				{
+					Blip fblip = weatherBlip.insertInlineBlip(weatherBlip.length());
+					fblip.append("\ntitle: "+forecastDay.getTitle());
+					fblip.append("\nConditions: "+forecastDay.getConditions());
+					fblip.append("\n Object:"+forecastDay);
+				}
 			}
 		}
 	}
