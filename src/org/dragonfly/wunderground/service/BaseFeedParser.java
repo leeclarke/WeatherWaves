@@ -2,7 +2,6 @@ package org.dragonfly.wunderground.service;
 //TODO: Look into to using HTTPClient, might be improved performance. said to retry three times if it cannot connect to the server. Good for mobile apps
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;

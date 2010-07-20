@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-
 import org.dragonfly.weatherwave.WeatherWaveContext;
 import org.dragonfly.wunderground.domain.Alert;
 import org.dragonfly.wunderground.domain.DragonflyDomain;

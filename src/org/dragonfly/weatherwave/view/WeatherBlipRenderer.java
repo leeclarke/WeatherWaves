@@ -8,6 +8,7 @@ import org.dragonfly.wunderground.domain.Forecast;
 import org.dragonfly.wunderground.domain.ForecastDay;
 import org.dragonfly.wunderground.domain.ObservationLocation;
 import org.dragonfly.wunderground.domain.WeatherObservation;
+import org.dragonfly.wunderground.service.ForcastHandler;
 
 import com.google.wave.api.Blip;
 import com.google.wave.api.BlipContentRefs;
@@ -156,25 +157,26 @@ public class WeatherBlipRenderer
 	{
 		if(forecasts.size() > 0)
 		{
-			Forecast theForecast = forecasts.get(0);
 			String title = "\n\nWeather Forecast for " + query;
-			weatherBlip.append(title);
-			
-			
-			weatherBlip.range(0, title.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
 			for (Forecast forecast : forecasts)
 			{
+				weatherBlip.append(title);
 				weatherBlip.append("\nDate: "+forecast.getDate());
-				weatherBlip.append("\nMoon Phase: "+forecast.getMoon_phase().getMoonPhaseString());
+				weatherBlip.append("\nMoon "+forecast.getMoon_phase().getMoonPhaseString());
 				weatherBlip.append("\nSunrise: "+forecast.getMoon_phase().getSunriseString());
-				weatherBlip.append("\nSunset: "+forecast.getMoon_phase().getSunsetString());
+				weatherBlip.append("\nSunset: "+forecast.getMoon_phase().getSunsetString()+"\n");
+				weatherBlip.range(0, title.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
 				List<ForecastDay> txtFc = forecast.getTxt_forecast();
 				for (ForecastDay forecastDay : txtFc)
 				{
+					String fTitle = forecastDay.getTitle();
 					Blip fblip = weatherBlip.insertInlineBlip(weatherBlip.length());
-					fblip.append("\ntitle: "+forecastDay.getTitle());
-					fblip.append("\nConditions: "+forecastDay.getConditions());
-					fblip.append("\n Object:"+forecastDay);
+					fblip.append("\nicon:"+forecastDay.getIcon());
+					int titleStart = fblip.length();
+					fblip.append("\n"+fTitle);
+					fblip.append("\n"+forecastDay.getFcttext());
+					
+					fblip.range(titleStart, fTitle.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
 				}
 			}
 		}

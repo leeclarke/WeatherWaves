@@ -43,7 +43,7 @@ public class WeatherWaveRobot extends AbstractRobot
 	
 	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]"; // regex: @WW\[.....*\]
 
-	private static final String BOT_AVATAR_URL = "http://weatherwaves.appsopt.com/img/Tray-Weather-Forecast.icon.gif";
+	private static final String BOT_AVATAR_URL = "http://weatherwaves.appspot.com/img/weatherWaveIcon.png";
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.GenericServlet#init()
@@ -176,6 +176,7 @@ public class WeatherWaveRobot extends AbstractRobot
 		} catch (Exception e)
 		{
 			debug.append("Captain we have a problem!" + e);
+			logger.warning("ERROR: WeatherWaveRobot "+e);
 			blip.append(ERROR_MSG);
 		}
 		debug.append("    Weatherwaves has tried to update.");
