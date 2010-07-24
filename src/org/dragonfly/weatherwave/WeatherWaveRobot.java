@@ -227,7 +227,7 @@ public class WeatherWaveRobot extends AbstractRobot
 				if (cmd.equalsIgnoreCase("F") || cmd.equalsIgnoreCase("forecast"))
 				{
 					List<Forecast> forecast = new WUService().getForecast(q);
-					
+					logger.warning("Calling renderForecast");
 					WeatherBlipRenderer.renderForecast(forecast, blip.insertInlineBlip(insertPos),q);
 					
 				} else if (cmd.equalsIgnoreCase("A") || cmd.equalsIgnoreCase("Alert"))
@@ -248,6 +248,8 @@ public class WeatherWaveRobot extends AbstractRobot
 			catch (Exception e)
 			{
 				debug.append("Captain we have a problem!" + e);
+				logger.severe("ERROR: callCommand" +e);
+				logger.severe("ErrStr: "+e.toString());
 				blip.append(ERROR_MSG);
 			}
 		}
