@@ -2,12 +2,11 @@ package org.dragonfly.wunderground.service;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.dragonfly.wunderground.domain.Location;
 import org.dragonfly.wunderground.domain.WeatherObservation;
 import org.dragonfly.wunderground.exception.DragonflySaxException;
-import org.dragonfly.wunderground.service.WUService;
-
-import junit.framework.TestCase;
 
 public class TestWUService extends TestCase
 {

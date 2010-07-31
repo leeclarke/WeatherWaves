@@ -28,8 +28,6 @@ Simply adding a **|a** or **|f** after your zip code will do the trick! Also I s
 Have fun!
 
 
-----------
-
 
 License
 -----------
