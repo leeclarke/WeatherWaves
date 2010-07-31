@@ -1,9 +1,13 @@
 package org.dragonfly.wunderground.domain;
 
+import java.util.logging.Logger;
+
+import org.dragonfly.weatherwave.view.WeatherBlipRenderer;
 import org.dragonfly.wunderground.util.Exportable;
 
 public class MoonPhase extends DragonflyDomain
 {
+	private static final Logger logger = Logger.getLogger(MoonPhase.class.getName());
 	public static final String root = "moon_phase";
 
 	enum MOON_PHASE { 
@@ -70,6 +74,7 @@ public class MoonPhase extends DragonflyDomain
 	 */
 	public String getMoonPhaseString()
 	{
+		logger.warning("Enter getMoonPhaseString");
 		StringBuilder sb = new StringBuilder();
 		sb.append("Phase: ").append(getMoonPhaseName());
 		sb.append(" Percent Illuminated:").append(percentIlluminated);

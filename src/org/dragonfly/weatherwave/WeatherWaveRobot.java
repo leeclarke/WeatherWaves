@@ -43,7 +43,7 @@ public class WeatherWaveRobot extends AbstractRobot
 	
 	public static final String WW_REG_PATTERN = "@WW\\[.{4}.*\\]"; // regex: @WW\[.....*\]
 
-	private static final String BOT_AVATAR_URL = "http://weatherwaves.appspot.com/img/weatherWaveIcon.png";
+	private static final String BOT_AVATAR_URL = "http://weatherwaves.appspot.com/avatar.png";
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.GenericServlet#init()
@@ -92,7 +92,7 @@ public class WeatherWaveRobot extends AbstractRobot
 	@Override
 	protected String getRobotAvatarUrl()
 	{
-		return BOT_AVATAR_URL;
+		return "http://weatherwaves.appspot.com/avatar.png";
 	}
 
 	
@@ -200,11 +200,14 @@ public class WeatherWaveRobot extends AbstractRobot
 	private void callWWCommand(String query, Blip blip, StringBuilder debug, int insertPos) throws DragonflySaxException
 	{
 		// remove debug keyword
+		logger.entering(WeatherWaveRobot.class.getName(), "callWWCommand", new Object[]{query, blip,debug,insertPos});
+		logger.info("# Enter callWWCommand");
 		query = query.contains(DEBUG) ? query.substring(0, query.indexOf(DEBUG) - 1) : query;
 		StringTokenizer st = new StringTokenizer(query, "|");
 
 		if (st.countTokens() == 1)
 		{
+			logger.info("Tokens found");
 			List<WeatherObservation> rtn = new WUService().getCurrentConditions(query);
 			Blip weatherBlip = blip.insertInlineBlip(insertPos);
 
@@ -219,6 +222,7 @@ public class WeatherWaveRobot extends AbstractRobot
 		}
 		else
 		{
+			logger.info("NO Tokens found");
 			String q = st.nextToken();
 			String cmd = st.nextToken();
 			try

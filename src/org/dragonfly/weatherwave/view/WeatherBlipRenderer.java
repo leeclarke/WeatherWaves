@@ -32,6 +32,7 @@ public class WeatherBlipRenderer
 	{
 		if (obs != null && weatherBlip != null)
 		{
+		
 			StringBuilder sb = new StringBuilder("\n\n\n");
 			ObservationLocation loc = obs.getDisplay_location();
 			sb.append("Current conditions at ").append(loc.getCity()).append(", ").append(loc.getZip()).append(" ");
@@ -164,7 +165,25 @@ public class WeatherBlipRenderer
 			{
 				weatherBlip.append(title);
 				weatherBlip.append("\nDate: "+forecast.getDate());
-				weatherBlip.append("\nMoon "+forecast.getMoon_phase().getMoonPhaseString());
+				logger.warning("Post Date");
+				if(forecast == null)
+					logger.warning("forecase == null");
+				if(forecast.getMoon_phase() == null)
+					logger.warning("Moon == null");
+				else
+				{
+					logger.warning("MoonPhase Not null");
+					logger.warning("Moon == "+forecast.getMoon_phase());
+				}
+				try{
+					weatherBlip.append("\nMoon "+forecast.getMoon_phase().getMoonPhaseString());
+				}
+				catch(Exception e)
+				{
+					weatherBlip.append("\nMoon Unavailable");
+				}
+					
+				logger.warning("Post Moon");
 				weatherBlip.append("\nSunrise: "+forecast.getMoon_phase().getSunriseString());
 				weatherBlip.append("\nSunset: "+forecast.getMoon_phase().getSunsetString()+"\n");
 				weatherBlip.range(0, title.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
