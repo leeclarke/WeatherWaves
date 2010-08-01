@@ -157,7 +157,7 @@ public class WeatherBlipRenderer
 	 */
 	public static void renderForecast(List<Forecast> forecasts, Blip weatherBlip, String query)  throws WWViewException
 	{
-		logger.warning("Enter renderForecast");
+		logger.info("Enter renderForecast");
 		if(forecasts.size() > 0)
 		{
 			String title = "\n\nWeather Forecast for " + query;
@@ -165,15 +165,14 @@ public class WeatherBlipRenderer
 			{
 				weatherBlip.append(title);
 				weatherBlip.append("\nDate: "+forecast.getDate());
-				logger.warning("Post Date");
 				if(forecast == null)
-					logger.warning("forecase == null");
+					logger.info("forecase == null");
 				if(forecast.getMoon_phase() == null)
-					logger.warning("Moon == null");
+					logger.info("Moon == null");
 				else
 				{
-					logger.warning("MoonPhase Not null");
-					logger.warning("Moon == "+forecast.getMoon_phase());
+					logger.info("MoonPhase Not null");
+					logger.info("Moon == "+forecast.getMoon_phase());
 				}
 				try{
 					weatherBlip.append("\nMoon "+forecast.getMoon_phase().getMoonPhaseString());
@@ -183,23 +182,31 @@ public class WeatherBlipRenderer
 					weatherBlip.append("\nMoon Unavailable");
 				}
 					
-				logger.warning("Post Moon");
+				logger.info("Post Moon");
 				weatherBlip.append("\nSunrise: "+forecast.getMoon_phase().getSunriseString());
 				weatherBlip.append("\nSunset: "+forecast.getMoon_phase().getSunsetString()+"\n");
 				weatherBlip.range(0, title.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
 				List<ForecastDay> txtFc = forecast.getTxt_forecast();
-				logger.warning("Main Blip done");
+				logger.info("Main Blip done");
 				for (ForecastDay forecastDay : txtFc)
 				{
-					logger.warning("write ForcastDAy ");
+					logger.info("write ForcastDay ");
 					String fTitle = forecastDay.getTitle();
 					Blip fblip = weatherBlip.insertInlineBlip(weatherBlip.length());
 					fblip.append("\nicon:"+forecastDay.getIcon());
+					
+					//TODO convert to image
+//  http://icons-ecast.wxug.com/i/c/e/  _.gif					
 					int titleStart = fblip.length();
 					fblip.append("\n"+fTitle);
 					fblip.append("\n"+forecastDay.getFcttext());
-					logger.warning("done fday");
-					fblip.range(titleStart, fTitle.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
+					logger.info("done fday title="+fTitle);
+					if(fTitle != null && fTitle.length() > 0)
+					{
+						logger.warning("set Title style");
+						fblip.range(0, fTitle.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
+						logger.warning("end title style");
+					}
 				}
 			}
 		}

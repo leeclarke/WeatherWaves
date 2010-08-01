@@ -1,15 +1,11 @@
 package org.dragonfly.wunderground.domain;
 
-import java.util.logging.Logger;
-
-import org.dragonfly.weatherwave.view.WeatherBlipRenderer;
 import org.dragonfly.wunderground.util.Exportable;
 
 public class MoonPhase extends DragonflyDomain
 {
-	private static final Logger logger = Logger.getLogger(MoonPhase.class.getName());
 	public static final String root = "moon_phase";
-//TODO: AGEOFMOON 1-30  (30 is the NewMoon)
+
 	enum MOON_PHASE { 
 		NA("n/a") ,WAXING_GIBBIOUS("Waxing Gibbous"), FIRST_QUARTER("First Quarter"), WAXING_CRESCENT("Waxing Crecent"), NEW("New"), WANING_CRESCENT("Waining Crecent") ,THIRD_QUARTER("Third Quarter"), WANING_GIBBOUS("Waining Gibbous"), FULL("Full");
 		
@@ -25,9 +21,38 @@ public class MoonPhase extends DragonflyDomain
 			return txtName;
 		}
 		
-		public MOON_PHASE getByAge(int age)
+		/**
+		 * REturns the moon type based on the age (days old) of the moon
+		 * @param age
+		 * @return
+		 */
+		public static  MOON_PHASE getByAge(int age)
 		{
-			//TODO 1 should always == New
+			switch (age) {
+				case 29 : case 30 : case 0 : case 1 : case 2 : 	case 3 :
+					return MOON_PHASE.NEW;
+				
+				case 4 : case 5 : case 6 :
+					return MOON_PHASE.WAXING_CRESCENT;
+					
+				case 7 : case 8 : case 9 :
+					return MOON_PHASE.FIRST_QUARTER;
+					
+				case 10 : case 11 : case 12 : case 13 :
+					return MOON_PHASE.WAXING_GIBBIOUS;
+					
+				case 14 : case 15 : case 16 : case 17 :
+					return MOON_PHASE.FULL;
+				
+				case 18: case 19: case 20: case 21:
+					return MOON_PHASE.WANING_GIBBOUS;
+				
+				case 22: case 23: case 24: case 25:
+					return MOON_PHASE.THIRD_QUARTER;
+				
+				case 26: case 27: case 28:
+					return MOON_PHASE.WANING_CRESCENT;
+			}
 			return NA;
 		}
 	};
@@ -71,7 +96,7 @@ public class MoonPhase extends DragonflyDomain
 		{
 			moonInt = 0;
 		}
-		return (MOON_PHASE.values()[moonInt]).getTxtName();
+		return (MOON_PHASE.getByAge(moonInt)).getTxtName();
 	}
 	
 	/**
@@ -80,10 +105,9 @@ public class MoonPhase extends DragonflyDomain
 	 */
 	public String getMoonPhaseString()
 	{
-		logger.warning("Enter getMoonPhaseString");
 		StringBuilder sb = new StringBuilder();
 		sb.append("Phase: ").append(getMoonPhaseName());
-		sb.append(" Percent Illuminated:").append(percentIlluminated);
+		sb.append(", Percent Illuminated: ").append(percentIlluminated).append("%");
 		
 		return sb.toString();
 	}
@@ -95,7 +119,7 @@ public class MoonPhase extends DragonflyDomain
 	public String getSunsetString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(sunset_hour).append(":").append(sunset_minute);
+		sb.append(sunset_hour).append(":").append(sunset_minute).append(" PM");
 		return sb.toString();
 	}
 	
@@ -106,7 +130,7 @@ public class MoonPhase extends DragonflyDomain
 	public String getSunriseString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(sunrise_hour).append(":").append(sunrise_minute);
+		sb.append(sunrise_hour).append(":").append(sunrise_minute).append(" AM");
 		return sb.toString();
 	}
 	

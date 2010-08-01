@@ -1,7 +1,6 @@
 package org.dragonfly.weatherwave;
 //TODO: Need to  include the Weather image in output
 //TODO: Need Bot image
-//TODO: Finish Forecast Render
 
 import java.io.File;
 import java.util.List;
@@ -78,21 +77,21 @@ public class WeatherWaveRobot extends AbstractRobot
 	}
 
 	@Override
-	protected String getRobotName()
+	public String getRobotName()
 	{
 		return "WeatherWaves Robot";
 	}
 
 	@Override
-	protected String getRobotProfilePageUrl()
+	public String getRobotProfilePageUrl()
 	{
-		return null;
+		return "";
 	}
 
 	@Override
-	protected String getRobotAvatarUrl()
+	public String getRobotAvatarUrl()
 	{
-		return "http://weatherwaves.appspot.com/avatar.png";
+		return BOT_AVATAR_URL;
 	}
 
 	
