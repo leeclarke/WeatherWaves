@@ -9,7 +9,7 @@ public class MoonPhase extends DragonflyDomain
 {
 	private static final Logger logger = Logger.getLogger(MoonPhase.class.getName());
 	public static final String root = "moon_phase";
-
+//TODO: AGEOFMOON 1-30  (30 is the NewMoon)
 	enum MOON_PHASE { 
 		NA("n/a") ,WAXING_GIBBIOUS("Waxing Gibbous"), FIRST_QUARTER("First Quarter"), WAXING_CRESCENT("Waxing Crecent"), NEW("New"), WANING_CRESCENT("Waining Crecent") ,THIRD_QUARTER("Third Quarter"), WANING_GIBBOUS("Waining Gibbous"), FULL("Full");
 		
@@ -23,6 +23,12 @@ public class MoonPhase extends DragonflyDomain
 		public String getTxtName()
 		{
 			return txtName;
+		}
+		
+		public MOON_PHASE getByAge(int age)
+		{
+			//TODO 1 should always == New
+			return NA;
 		}
 	};
 	
