@@ -126,6 +126,9 @@ public class WeatherObservation extends DragonflyDomain
 	@Exportable(xmlName = "observation_location", jsonName = "observationLocation")
 	public ObservationLocation observation_location;
 
+	@Exportable(xmlName = "icon")
+	public String icon;
+
 	public WeatherObservation()
 	{
 		super();
@@ -531,6 +534,15 @@ public class WeatherObservation extends DragonflyDomain
 		observation_location = observationLocation;
 	}
 
+	public String getIcon()
+	{
+		return this.icon;
+	}
+
+	public void setIcon(String icon)
+	{
+		this.icon = icon;
+	}
 	
 
 }

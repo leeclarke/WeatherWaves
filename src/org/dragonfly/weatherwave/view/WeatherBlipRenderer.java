@@ -12,6 +12,7 @@ import org.dragonfly.wunderground.domain.WeatherObservation;
 
 import com.google.wave.api.Blip;
 import com.google.wave.api.BlipContentRefs;
+import com.google.wave.api.Image;
 
 /**
  * Tool for rendering Weather Objects to a Blip format.
@@ -22,6 +23,7 @@ public class WeatherBlipRenderer
 {
 	private static final Logger logger = Logger.getLogger(WeatherBlipRenderer.class.getName());
 	
+	public static String WEATHER_ICON_PATH = "http://icons-ecast.wxug.com/i/c/e/";
 	/**
 	 * Simply creates a view from the WeatherObservation object.
 	 * 
@@ -32,16 +34,17 @@ public class WeatherBlipRenderer
 	{
 		if (obs != null && weatherBlip != null)
 		{
-		
-			StringBuilder sb = new StringBuilder("\n\n\n");
+			weatherBlip.append("\n\n");
+			weatherBlip.append(new Image(WEATHER_ICON_PATH + obs.getIcon()+".gif", 42, 42, obs.getIcon()));
+			StringBuilder sb = new StringBuilder("\n");
 			ObservationLocation loc = obs.getDisplay_location();
-			sb.append("Current conditions at ").append(loc.getCity()).append(", ").append(loc.getZip()).append(" ");
+			sb.append("Current conditions at ").append(loc.getCity()).append(", ").append(loc.getZip()).append(" \n");
 			int titleLen = sb.length();
 			BlipContentRefs head = weatherBlip.append(sb.toString());
 
-			sb = new StringBuilder("\n");
-			sb.append(obs.observation_time);
-			BlipContentRefs temp = weatherBlip.append(sb.toString());
+			
+//			sb.append(obs.observation_time);
+			BlipContentRefs temp = weatherBlip.append(obs.observation_time);
 			temp.annotate("style/backgroundColor", "#FFFF99");
 
 			sb = new StringBuilder("\nTemprature:");
@@ -86,7 +89,7 @@ public class WeatherBlipRenderer
 			sb.append(obs.getVisibility_km()).append(" km)");
 			weatherBlip.append(sb.toString());
 
-			BlipContentRefs title = weatherBlip.range(0, titleLen);
+			BlipContentRefs title = weatherBlip.range(2, titleLen+2);
 			title.annotate("style/fontWeight", "bold");
 			title.annotate("style/backgroundColor", "#3399FF");
 
@@ -193,18 +196,18 @@ public class WeatherBlipRenderer
 					logger.info("write ForcastDay ");
 					String fTitle = forecastDay.getTitle();
 					Blip fblip = weatherBlip.insertInlineBlip(weatherBlip.length());
-					fblip.append("\nicon:"+forecastDay.getIcon());
 					
-					//TODO convert to image
-//  http://icons-ecast.wxug.com/i/c/e/  _.gif					
-					int titleStart = fblip.length();
-					fblip.append("\n"+fTitle);
+					fblip.append("\n");
+					int endImgPos = fblip.length();
+					fblip.append(fTitle+"\n");
+					fblip.append(new Image(WEATHER_ICON_PATH + forecastDay.getIcon()+".gif", 42, 42, forecastDay.getIcon()));
+					
 					fblip.append("\n"+forecastDay.getFcttext());
 					logger.info("done fday title="+fTitle);
 					if(fTitle != null && fTitle.length() > 0)
 					{
 						logger.warning("set Title style");
-						fblip.range(0, fTitle.length()+1).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
+						fblip.range(endImgPos, fTitle.length()+2).annotate("style/backgroundColor", "#3399FF").annotate("style/fontWeight", "bold");
 						logger.warning("end title style");
 					}
 				}
