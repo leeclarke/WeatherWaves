@@ -1,4 +1,4 @@
-**WeatherWaves** is a GoogleWave Bot! You can add The Weather Bot to any Wave and anytime you type the WW request code in your Wave it will promptly replace the WW request with the Weather brought to you by the Weather Underground.
+**WeatherWaves** is a GoogleWave Bot! You can add The Weather Bot to any Wave and anytime you type the WW request code in your Wave it will promptly replace the WW request with the weather reports brought to you by the Weather Underground. 
 
 Try it!
 -----------
